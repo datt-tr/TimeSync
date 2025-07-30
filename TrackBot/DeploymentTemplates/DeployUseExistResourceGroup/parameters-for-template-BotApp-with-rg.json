@@ -3,7 +3,7 @@
   "contentVersion": "1.0.0.0",
   "parameters": {
     "appServiceName": {
-      "value": ""
+      "value": "TrackBot781"
     },
     "existingAppServicePlanName": {
       "value": ""
@@ -12,10 +12,10 @@
       "value": ""
     },
     "newAppServicePlanName": {
-      "value": ""
+      "value": "TrackBot-AppServicePlan"
     },
     "newAppServicePlanLocation": {
-      "value": ""
+      "value": "germanywestcentral"
     },
     "newAppServicePlanSku": {
       "value": {
@@ -27,22 +27,22 @@
       }
     },
     "appType": {
-      "value": "MultiTenant"
+      "value": "UserAssignedMSI"
     },
     "appId": {
-      "value": ""
+      "value": "10f2982f-32bc-49fd-8278-160de562001c"
     },
     "appSecret": {
       "value": ""
     },
     "UMSIName": {
-      "value": ""
+      "value": "TrackBotId"
     },
     "UMSIResourceGroupName": {
-      "value": ""
+      "value": "TimeSync"
     },
     "tenantId": {
-      "value": ""
+      "value": "8f8e1b17-99b8-455c-beb7-06378d555744"
     }
   }
 }
