@@ -3,7 +3,7 @@
   "contentVersion": "1.0.0.0",
   "parameters": {
     "azureBotId": {
-      "value": ""
+      "value": "TrackBot781"
     },
     "azureBotSku": {
       "value": "S1"
@@ -12,22 +12,22 @@
       "value": "global"
     },
     "botEndpoint": {
-      "value": ""
+      "value": "https://trackbot781.azurewebsites.net/api/messages"
     },
     "appType": {
-      "value": "MultiTenant"
+      "value": "UserAssignedMSI"
     },
     "appId": {
-      "value": ""
+      "value": "10f2982f-32bc-49fd-8278-160de562001c"
     },
     "UMSIName": {
-      "value": ""
+      "value": "TrackBotId"
     },
     "UMSIResourceGroupName": {
-      "value": ""
+      "value": "TimeSync"
     },
     "tenantId": {
-      "value": ""
+      "value": "8f8e1b17-99b8-455c-beb7-06378d555744"
     }
   }
 }
