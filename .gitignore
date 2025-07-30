@@ -1,0 +1,33 @@
+# Build results
+bin/
+obj/
+
+# User-specific files
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+
+# ASP.NET
+project.lock.json
+project.fragment.lock.json
+artifacts/
+
+# Visual Studio Code
+.vscode/
+
+# Rider
+.idea/
+
+# Paket (falls verwendet)
+.paket/
+paket-files/
+
+# Logs
+*.log
+
+# Publish outputs
+*.publish/
+
+# Environment-specific
+.env
