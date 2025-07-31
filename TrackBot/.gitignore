@@ -31,3 +31,7 @@ paket-files/
 
 # Environment-specific
 .env
+
+#personal
+.deployment
+*.zip
