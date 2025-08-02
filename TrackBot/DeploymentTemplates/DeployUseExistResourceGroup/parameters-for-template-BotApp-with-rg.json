@@ -1,0 +1,48 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentParameters.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "appServiceName": {
+      "value": "TrackBot781"
+    },
+    "existingAppServicePlanName": {
+      "value": ""
+    },
+    "existingAppServicePlanLocation": {
+      "value": ""
+    },
+    "newAppServicePlanName": {
+      "value": "TrackBot-AppServicePlan"
+    },
+    "newAppServicePlanLocation": {
+      "value": "germanywestcentral"
+    },
+    "newAppServicePlanSku": {
+      "value": {
+        "name": "S1",
+        "tier": "Standard",
+        "size": "S1",
+        "family": "S",
+        "capacity": 1
+      }
+    },
+    "appType": {
+      "value": "UserAssignedMSI"
+    },
+    "appId": {
+      "value": "10f2982f-32bc-49fd-8278-160de562001c"
+    },
+    "appSecret": {
+      "value": ""
+    },
+    "UMSIName": {
+      "value": "TrackBotId"
+    },
+    "UMSIResourceGroupName": {
+      "value": "TimeSync"
+    },
+    "tenantId": {
+      "value": "8f8e1b17-99b8-455c-beb7-06378d555744"
+    }
+  }
+}
