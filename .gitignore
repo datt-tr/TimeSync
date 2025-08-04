@@ -33,5 +33,4 @@ paket-files/
 .env
 
 #personal
-.deployment
 *.zip
