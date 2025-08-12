@@ -12,7 +12,7 @@ namespace EchoBot.Bots
     {
         protected override async Task OnMessageActivityAsync(ITurnContext<IMessageActivity> turnContext, CancellationToken cancellationToken)
         {
-            var replyText = $"Echo 2: {turnContext.Activity.Text}";
+            var replyText = $"Echo (Joern test): {turnContext.Activity.Text}";
             await turnContext.SendActivityAsync(MessageFactory.Text(replyText, replyText), cancellationToken);
         }
 
