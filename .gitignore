@@ -34,3 +34,4 @@ paket-files/
 
 #personal
 *.zip
+*.vs/
