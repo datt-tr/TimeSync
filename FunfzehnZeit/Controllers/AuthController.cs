@@ -1,3 +1,5 @@
+using System.Threading.Tasks;
+using FunfzehnZeit.Services;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Funfzehnzeit.Controllers;
@@ -6,17 +8,21 @@ namespace Funfzehnzeit.Controllers;
 [Route("api/v1/[controller]")]
 public class AuthController : ControllerBase
 {
+  private readonly WebTerminalService _webTerminalService;
+
+  public AuthController(WebTerminalService webTerminalService)
+  {
+    _webTerminalService = webTerminalService;
+  }
 
   [HttpGet]
-  public void GetLoginPage()
+  public async Task GetLoginPage()
   {
-
+    await _webTerminalService.GetLoginPageAsync();
   }
 
   [HttpPost]
-  public ActionResult Login()
+  public async Task Login()
   {
-    
-    return Ok();
   }
 }

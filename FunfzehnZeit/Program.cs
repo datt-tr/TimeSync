@@ -1,5 +1,6 @@
 using Funfzehnzeit.Services;
 using FunfzehnZeit.Models;
+using FunfzehnZeit.Services;
 using Scalar.AspNetCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -7,6 +8,7 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllers();
 builder.Services.AddOpenApi();
 builder.Services.Configure<GlobalVariables>(builder.Configuration.GetSection(GlobalVariables.CollectionName));
+builder.Services.AddHttpClient<WebTerminalService>();
 
 builder.Services.AddScoped<IApplication, Application>();
 
