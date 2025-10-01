@@ -1,15 +1,19 @@
+using FunfzehnZeit.Models;
+using Microsoft.Extensions.Options;
 namespace Funfzehnzeit.Services;
+
 public class Application : IApplication
 {
-    private readonly IConfiguration _config;
+  private readonly GlobalVariables _globalVariables;
 
-    public Application(IConfiguration config)
-    {
-        _config = config;
-    }
+  public Application(IOptions<GlobalVariables> globalVariables)
+  {
+    _globalVariables = globalVariables.Value;
+  }
   public void Start()
   {
-        Console.WriteLine("Application started");
-        Console.WriteLine(_config.GetValue<string>("username"));
-  }
+    Console.WriteLine("Application started");
+    Console.WriteLine(_globalVariables.BaseUrl);
+    Console.WriteLine("Application finished");
+}
 }

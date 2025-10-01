@@ -1,13 +1,11 @@
-using FunfzehnZeit.Models;
-using Microsoft.EntityFrameworkCore;
-using Scalar.AspNetCore;
 using Funfzehnzeit.Services;
+using FunfzehnZeit.Models;
+using Scalar.AspNetCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllers();
 builder.Services.AddOpenApi();
-builder.Services.AddDbContext<TodoContext>(opt => opt.UseInMemoryDatabase("TodoList"));
 builder.Services.Configure<GlobalVariables>(builder.Configuration.GetSection(GlobalVariables.CollectionName));
 
 builder.Services.AddScoped<IApplication, Application>();
@@ -27,7 +25,7 @@ using (var serviceScope = app.Services.CreateScope())
     application.Start();
 }
 
-    app.UseHttpsRedirection();
+app.UseHttpsRedirection();
 
 app.UseAuthorization();
 
