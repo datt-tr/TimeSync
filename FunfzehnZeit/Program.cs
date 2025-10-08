@@ -2,15 +2,18 @@ using Funfzehnzeit.Services;
 using FunfzehnZeit.Models;
 using FunfzehnZeit.Services;
 using Scalar.AspNetCore;
+using FunfzehnZeit.Interfaces;
 
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllers();
 builder.Services.AddOpenApi();
 builder.Services.Configure<GlobalVariables>(builder.Configuration.GetSection(GlobalVariables.CollectionName));
-builder.Services.AddHttpClient<WebTerminalService>();
+builder.Services.AddHttpClient<IWebTerminalService, WebTerminalService>();
 
 builder.Services.AddScoped<IApplication, Application>();
+builder.Services.AddSingleton<IUserSessionService, UserSessionService>();
+
 
 var app = builder.Build();
 

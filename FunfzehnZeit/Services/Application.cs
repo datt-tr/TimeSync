@@ -2,7 +2,7 @@ using FunfzehnZeit.Models;
 using Microsoft.Extensions.Options;
 namespace Funfzehnzeit.Services;
 
-public class Application : IApplication
+internal class Application : IApplication
 {
   private readonly GlobalVariables _globalVariables;
 
