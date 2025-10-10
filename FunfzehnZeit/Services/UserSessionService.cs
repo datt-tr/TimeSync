@@ -31,9 +31,9 @@ internal class UserSessionService : IUserSessionService
     _userSession.Uid = uid;
   }
 
-  public int GetCallNumber()
+  public string GetCallNumber()
   {
-    return _userSession.CallNumber;
+    return _userSession.CallNumber.ToString();
   }
 
   public void UpdateCallNumber()

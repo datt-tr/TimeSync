@@ -6,9 +6,18 @@ namespace FunfzehnZeit.Controllers;
 [Route("api/v1/[controller]")]
 public class TimeController : ControllerBase
 {
-  [HttpPost]
-  public ActionResult<string> GetStatus()
+  private readonly IWebTerminalService _webTerminalService;
+
+  public TimeController(IWebTerminalService webTerminalService)
   {
-    return "";
+    _webTerminalService = webTerminalService;
+  }
+
+  [HttpGet]
+  [Route("status")]
+  public async Task<IActionResult> GetStatus()
+  {
+    await _webTerminalService.GetStatusAsync();
+    return Ok("Status received");
   }
 }

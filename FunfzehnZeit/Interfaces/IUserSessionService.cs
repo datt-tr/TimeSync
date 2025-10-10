@@ -6,7 +6,7 @@ public interface IUserSessionService
   void GetSession();
   void DeleteSession();
 
-  int GetCallNumber();
+  string GetCallNumber();
   void UpdateCallNumber();
   string GetUid();
   void UpdateUid(string uid);

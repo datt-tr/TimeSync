@@ -6,6 +6,9 @@ using FunfzehnZeit.Interfaces;
 
 var builder = WebApplication.CreateBuilder(args);
 
+builder.Logging.ClearProviders();
+builder.Logging.AddConsole();
+
 builder.Services.AddControllers();
 builder.Services.AddOpenApi();
 builder.Services.Configure<GlobalVariables>(builder.Configuration.GetSection(GlobalVariables.CollectionName));

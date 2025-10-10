@@ -12,9 +12,11 @@ internal class WebTerminalService : IWebTerminalService
   private readonly HttpClient _httpClient;
   private readonly GlobalVariables _globalVariables;
   private readonly IUserSessionService _userSessionService;
+  private readonly ILogger _logger;
 
-  public WebTerminalService(HttpClient httpClient, IOptions<GlobalVariables> globalVariables, IUserSessionService userSessionService)
+  public WebTerminalService(HttpClient httpClient, IOptions<GlobalVariables> globalVariables, IUserSessionService userSessionService, ILogger<WebTerminalService> logger)
   {
+    _logger = logger;
     _userSessionService = userSessionService;
     _httpClient = httpClient;
     _globalVariables = globalVariables.Value;
@@ -28,8 +30,9 @@ internal class WebTerminalService : IWebTerminalService
     if (response.IsSuccessStatusCode)
     {
       var responseString = await response.Content.ReadAsStringAsync();
-      _userSessionService.UpdateConfirmUid(GetConfirmUidFromHtml(responseString));
-      // Console.WriteLine($"CONFIRMUID: {GetConfirmUidFromHtml(responseString)}");
+      var confirmUid = GetConfirmUidFromHtml(responseString);
+      _userSessionService.UpdateConfirmUid(confirmUid);
+      _logger.LogDebug($"ConfirmUid: {confirmUid}");
     }
   }
 
@@ -47,16 +50,38 @@ internal class WebTerminalService : IWebTerminalService
     if (response.IsSuccessStatusCode)
     {
       var responseString = await response.Content.ReadAsStringAsync();
-      _userSessionService.UpdateUid(GetUidFromHtml(responseString));
-      // Console.WriteLine(GetUidFromHtml(responseString));
-
-      using var followUp = await _httpClient.GetAsync($"?UID={_userSessionService.GetUid}");
+      var uid = GetUidFromHtml(responseString);
+      _userSessionService.UpdateUid(uid);
       _userSessionService.UpdateCurrentDate();
+      _logger.LogDebug($"Uid: {uid}");
+
+      using var followUp = await _httpClient.GetAsync($"?UID={uid}");
     }
   }
 
-  
+  public async Task GetStatusAsync()
+  {
+    _userSessionService.UpdateCallNumber();
 
+    var formData = new MultipartFormDataContent()
+    {
+      {new StringContent(_userSessionService.GetCallNumber()), "CALL_NO" },
+      {new StringContent(_userSessionService.GetUid()), "UID"},
+      {new StringContent("ZZStandard.css"), "CSS_FILE"},
+      {new StringContent("0"), "PAGEONLY"},
+      {new StringContent("1"), "SELECTED_MENU"},
+      {new StringContent("100"), "SELECTED_SUB_MENU"},
+      {new StringContent(_userSessionService.GetCurrentDate()), "SELECTED_DATE"},
+      {new StringContent("0"), "SELECTED_FUNCTION"},
+      {new StringContent("0"), "SELECTED_VALUE"},
+      {new StringContent("0"), "SELECTED_SUB_VALUE"},
+    };
+    using var response = await _httpClient.PostAsync($"?UID={_userSessionService.GetUid()}", formData);
+    if (response.IsSuccessStatusCode) {
+      var responseString = await response.Content.ReadAsStringAsync();
+      _logger.LogDebug(GetStatusFromHtml(responseString));
+    }
+  }
   private static string GetUidFromHtml(string html)
   {
     var htmlDoc = new HtmlDocument();
@@ -66,6 +91,7 @@ internal class WebTerminalService : IWebTerminalService
 
     return uid;
   }
+
   private static string GetConfirmUidFromHtml(string html)
   {
     var htmlDoc = new HtmlDocument();
@@ -74,5 +100,14 @@ internal class WebTerminalService : IWebTerminalService
     string confirmUid = htmlDoc.DocumentNode.SelectSingleNode("//input[@name='CONFIRMUID']").Attributes["value"].Value;
 
     return confirmUid;
+  }
+
+  private static string GetStatusFromHtml(string html)
+  {
+    var htmlDoc = new HtmlDocument();
+    htmlDoc.LoadHtml(html);
+
+    string status = htmlDoc.DocumentNode.SelectSingleNode("//td[@class='wtStatusContent']").InnerText.Trim();
+    return status;
   }
 }
