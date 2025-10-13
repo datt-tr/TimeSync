@@ -5,11 +5,16 @@ namespace FunfzehnZeit.Services;
 
 internal class UserSessionService : IUserSessionService
 {
+  private readonly ILogger _logger;
   private UserSessionData _userSession = new();
 
+  public UserSessionService(ILogger<UserSessionService> logger)
+  {
+    _logger = logger;
+  }
   public void CreateSession()
   {
-    _userSession = new();
+    throw new NotImplementedException();
   }
 
   public void GetSession()
@@ -23,6 +28,7 @@ internal class UserSessionService : IUserSessionService
   }
   public string GetUid()
   {
+    _logger.LogDebug($"{nameof(GetUid)} retrieves {_userSession.Uid}");
     return _userSession.Uid;
   }
 
@@ -33,6 +39,7 @@ internal class UserSessionService : IUserSessionService
 
   public string GetCallNumber()
   {
+    _logger.LogDebug($"{nameof(GetCallNumber)} retrieves {_userSession.CallNumber}");
     return _userSession.CallNumber.ToString();
   }
 
@@ -43,6 +50,7 @@ internal class UserSessionService : IUserSessionService
 
   public string GetConfirmUid()
   {
+    _logger.LogDebug($"{nameof(GetConfirmUid)} retrieves {_userSession.ConfirmUid}");
     return _userSession.ConfirmUid;
   }
 
@@ -53,6 +61,7 @@ internal class UserSessionService : IUserSessionService
 
   public string GetCurrentDate()
   {
+    _logger.LogDebug($"{nameof(GetCurrentDate)} retrieves {_userSession.CurrentDate}");
     return _userSession.CurrentDate.Date.ToString("dd.MM.yyyy");
   }
 

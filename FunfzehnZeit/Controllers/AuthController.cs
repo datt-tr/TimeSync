@@ -10,10 +10,12 @@ namespace Funfzehnzeit.Controllers;
 public class AuthController : ControllerBase
 {
   private readonly IWebTerminalService _webTerminalService;
-  private readonly IUserSessionService _userSessionService; 
+  private readonly IUserSessionService _userSessionService;
+  private readonly ILogger _logger;
 
-  public AuthController(IWebTerminalService webTerminalService, IUserSessionService userSessionService)
+  public AuthController(IWebTerminalService webTerminalService, IUserSessionService userSessionService, ILogger<AuthController> logger)
   {
+    _logger = logger;
     _webTerminalService = webTerminalService;
     _userSessionService = userSessionService;
   }
@@ -23,6 +25,7 @@ public class AuthController : ControllerBase
   public async Task<IActionResult> GetLoginPage()
   {
     await _webTerminalService.GetLoginPageAsync();
+    _logger.LogInformation($"{nameof(GetLoginPage)} Request executed");
     return Ok("Login page fetched");
   }
 
@@ -31,6 +34,7 @@ public class AuthController : ControllerBase
   public async Task<IActionResult> Login()
   {
     await _webTerminalService.LoginAsync();
+    _logger.LogInformation($"{nameof(Login)} Request executed");
     return Ok("Logged in");
   }
 }
