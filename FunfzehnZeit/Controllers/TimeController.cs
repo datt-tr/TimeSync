@@ -17,56 +17,49 @@ public class TimeController : ControllerBase
   }
 
 
-  [HttpGet]
-  [Route("office/start")]
+  [HttpPost("office/start")]
   public async Task<IActionResult> StartOffice()
   {
     await _webTerminalService.StartOfficeAsync();
     return Ok("Office started");
   }
 
-  [HttpGet]
-  [Route("office/end")]
+  [HttpPost("office/end")]
   public async Task<IActionResult> EndOffice()
   {
     await _webTerminalService.EndOfficeAsync();
     return Ok("Office ended");
   }
 
-  [HttpGet]
-  [Route("break/start")]
+  [HttpPost("break/start")]
   public async Task<IActionResult> StartBreak()
   {
     await _webTerminalService.StartBreakAsync();
     return Ok("Break started");
   }
 
-  [HttpGet]
-  [Route("break/end")]
+  [HttpPost("break/end")]
   public async Task<IActionResult> EndBreak()
   {
     await _webTerminalService.EndBreakAsync();
     return Ok("Break ended");
   }
 
-  [HttpGet]
-  [Route("home-office/start")]
+  [HttpPost("home-office/start")]
   public async Task<IActionResult> StartHomeOffice()
   {
     await _webTerminalService.StartHomeOfficeAsync();
     return Ok("Home Office started");
   }
 
-  [HttpGet]
-  [Route("home-office/end")]
+  [HttpPost("home-office/end")]
   public async Task<IActionResult> EndHomeOffice()
   {
     await _webTerminalService.EndHomeOfficeAsync();
     return Ok("Home Office ended");
   }
 
-  [HttpGet]
-  [Route("status")]
+  [HttpGet("status")]
   public async Task<IActionResult> GetStatus()
   {
     await _webTerminalService.GetStatusAsync();

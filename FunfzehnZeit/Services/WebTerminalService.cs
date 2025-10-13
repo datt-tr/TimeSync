@@ -66,7 +66,7 @@ internal class WebTerminalService : IWebTerminalService
   {
     _userSessionService.UpdateCallNumber();
 
-    var formData = GetBasicFormData(0, 1, 100, 101, 0, 0);
+    using var formData = GetBasicFormData(0, 1, 100, 101, 0, 0);
     using var response = await _httpClient.PostAsync($"?UID={_userSessionService.GetUid()}", formData);
   }
 
@@ -74,7 +74,7 @@ internal class WebTerminalService : IWebTerminalService
   {
     _userSessionService.UpdateCallNumber();
 
-    var formData = GetBasicFormData(0, 1, 100, 102, 0, 0);
+    using var formData = GetBasicFormData(0, 1, 100, 102, 0, 0);
     using var response = await _httpClient.PostAsync($"?UID={_userSessionService.GetUid()}", formData);
   }
 
@@ -82,7 +82,7 @@ internal class WebTerminalService : IWebTerminalService
   {
     _userSessionService.UpdateCallNumber();
 
-    var formData = GetBasicFormData(0, 1, 100, 103, 0, 0);
+    using var formData = GetBasicFormData(0, 1, 100, 103, 0, 0);
     using var response = await _httpClient.PostAsync($"?UID={_userSessionService.GetUid()}", formData);
   }
 
@@ -90,7 +90,7 @@ internal class WebTerminalService : IWebTerminalService
   {
     _userSessionService.UpdateCallNumber();
 
-    var formData = GetBasicFormData(0, 1, 100, 104, 0, 0);
+    using var formData = GetBasicFormData(0, 1, 100, 104, 0, 0);
     using var response = await _httpClient.PostAsync($"?UID={_userSessionService.GetUid()}", formData);
   }
 
@@ -98,7 +98,7 @@ internal class WebTerminalService : IWebTerminalService
   {
     _userSessionService.UpdateCallNumber();
 
-    var formData = GetBasicFormData(0, 1, 100, 119, 0, 0);
+    using var formData = GetBasicFormData(0, 1, 100, 119, 0, 0);
     using var response = await _httpClient.PostAsync($"?UID={_userSessionService.GetUid()}", formData);
   }
 
@@ -106,7 +106,7 @@ internal class WebTerminalService : IWebTerminalService
   {
     _userSessionService.UpdateCallNumber();
 
-    var formData = GetBasicFormData(0, 1, 100, 118, 0, 0);
+    using var formData = GetBasicFormData(0, 1, 100, 118, 0, 0);
     using var response = await _httpClient.PostAsync($"?UID={_userSessionService.GetUid()}", formData);
   }
 
@@ -114,7 +114,7 @@ internal class WebTerminalService : IWebTerminalService
   {
     _userSessionService.UpdateCallNumber();
 
-    var formData = GetBasicFormData(0, 1, 100, 113, 1, 0);
+    using var formData = GetBasicFormData(0, 1, 100, 113, 1, 0);
     using var response = await _httpClient.PostAsync($"?UID={_userSessionService.GetUid()}", formData);
 
     if (response.IsSuccessStatusCode)
@@ -128,7 +128,7 @@ internal class WebTerminalService : IWebTerminalService
   {
     _userSessionService.UpdateCallNumber();
 
-    var formData = GetBasicFormData(0, 1, 100, 0, 0, 0);
+    using var formData = GetBasicFormData(0, 1, 100, 0, 0, 0);
     using var response = await _httpClient.PostAsync($"?UID={_userSessionService.GetUid()}", formData);
     if (response.IsSuccessStatusCode)
     {
