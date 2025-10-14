@@ -1,21 +1,21 @@
 using System.Text.Json;
 using Azure;
-using FunfzehnZeit.Models;
+using FuenfzehnZeit.Models;
 using HtmlAgilityPack;
 using Microsoft.Extensions.Options;
-using FunfzehnZeit.Interfaces;
+using FuenfzehnZeit.Interfaces;
 using System.Text.RegularExpressions;
 
-namespace FunfzehnZeit.Services;
+namespace FuenfzehnZeit.Services;
 
-internal class WebTerminalService : IWebTerminalService
+internal class FuenfzehnZeitService : IFuenfzehnZeitService
 {
   private readonly HttpClient _httpClient;
   private readonly GlobalVariables _globalVariables;
   private readonly IUserSessionService _userSessionService;
   private readonly ILogger _logger;
 
-  public WebTerminalService(HttpClient httpClient, IOptions<GlobalVariables> globalVariables, IUserSessionService userSessionService, ILogger<WebTerminalService> logger)
+  public FuenfzehnZeitService(HttpClient httpClient, IOptions<GlobalVariables> globalVariables, IUserSessionService userSessionService, ILogger<FuenfzehnZeitService> logger)
   {
     _logger = logger;
     _userSessionService = userSessionService;

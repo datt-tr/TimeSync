@@ -1,6 +1,0 @@
-@FunfzehnZeit_HostAddress = http://localhost:5117
-
-GET {{FunfzehnZeit_HostAddress}}/weatherforecast/
-Accept: application/json
-
-###

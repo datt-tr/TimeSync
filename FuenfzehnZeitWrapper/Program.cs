@@ -1,7 +1,7 @@
-using FunfzehnZeit.Models;
-using FunfzehnZeit.Services;
+using FuenfzehnZeit.Models;
+using FuenfzehnZeit.Services;
 using Scalar.AspNetCore;
-using FunfzehnZeit.Interfaces;
+using FuenfzehnZeit.Interfaces;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -11,7 +11,7 @@ builder.Logging.AddConsole();
 builder.Services.AddControllers();
 builder.Services.AddOpenApi();
 builder.Services.Configure<GlobalVariables>(builder.Configuration.GetSection(GlobalVariables.CollectionName));
-builder.Services.AddHttpClient<IWebTerminalService, WebTerminalService>();
+builder.Services.AddHttpClient<IFuenfzehnZeitService, FuenfzehnZeitService>();
 
 builder.Services.AddSingleton<IUserSessionService, UserSessionService>();
 

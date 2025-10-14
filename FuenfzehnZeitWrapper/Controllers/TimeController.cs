@@ -2,20 +2,20 @@ using System.Runtime.CompilerServices;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 
-namespace FunfzehnZeit.Controllers;
+namespace FuenfzehnZeit.Controllers;
 
 [ApiController]
 [Route("api/v1/[controller]")]
 public class TimeController : ControllerBase
 {
   private readonly ILogger _logger;
-  private readonly IWebTerminalService _webTerminalService;
-  private readonly string _funfzehnZeitError = "Failed FunfzehnZeit Server Request";
+  private readonly IFuenfzehnZeitService _fuenfzehnZeitService;
+  private readonly string _fuenfzehnZeitError = "Failed FuenfzehnZeit Server Request";
 
-  public TimeController(IWebTerminalService webTerminalService, ILogger<TimeController> logger)
+  public TimeController(IFuenfzehnZeitService fuenfzehnZeitService, ILogger<TimeController> logger)
   {
     _logger = logger;
-    _webTerminalService = webTerminalService;
+    _fuenfzehnZeitService = fuenfzehnZeitService;
   }
 
 
@@ -24,11 +24,11 @@ public class TimeController : ControllerBase
   {
     try
     {
-      await _webTerminalService.StartOfficeAsync();
+      await _fuenfzehnZeitService.StartOfficeAsync();
     }
     catch (HttpRequestException)
     {
-      return TypedResults.BadRequest(_funfzehnZeitError);
+      return TypedResults.BadRequest(_fuenfzehnZeitError);
     }
 
     return TypedResults.Ok("Office started");
@@ -39,11 +39,11 @@ public class TimeController : ControllerBase
   {
     try
     {
-      await _webTerminalService.EndOfficeAsync();
+      await _fuenfzehnZeitService.EndOfficeAsync();
     }
     catch (HttpRequestException)
     {
-      return TypedResults.BadRequest(_funfzehnZeitError);
+      return TypedResults.BadRequest(_fuenfzehnZeitError);
     }
 
     return TypedResults.Ok("Office ended");
@@ -54,11 +54,11 @@ public class TimeController : ControllerBase
   {
     try
     {
-      await _webTerminalService.StartBreakAsync();
+      await _fuenfzehnZeitService.StartBreakAsync();
     }
     catch (HttpRequestException)
     {
-      return TypedResults.BadRequest(_funfzehnZeitError);
+      return TypedResults.BadRequest(_fuenfzehnZeitError);
     }
 
     return TypedResults.Ok("Break started");
@@ -69,11 +69,11 @@ public class TimeController : ControllerBase
   {
     try
     {
-      await _webTerminalService.EndBreakAsync();
+      await _fuenfzehnZeitService.EndBreakAsync();
     }
     catch (HttpRequestException)
     {
-      return TypedResults.BadRequest(_funfzehnZeitError);
+      return TypedResults.BadRequest(_fuenfzehnZeitError);
     }
 
     return TypedResults.Ok("Break ended");
@@ -84,11 +84,11 @@ public class TimeController : ControllerBase
   {
     try
     {
-      await _webTerminalService.StartHomeOfficeAsync();
+      await _fuenfzehnZeitService.StartHomeOfficeAsync();
     }
     catch (HttpRequestException)
     {
-      return TypedResults.BadRequest(_funfzehnZeitError);
+      return TypedResults.BadRequest(_fuenfzehnZeitError);
     }
 
     return TypedResults.Ok("Home Office started");
@@ -99,11 +99,11 @@ public class TimeController : ControllerBase
   {
     try
     {
-      await _webTerminalService.EndHomeOfficeAsync();
+      await _fuenfzehnZeitService.EndHomeOfficeAsync();
     }
     catch (HttpRequestException)
     {
-      return TypedResults.BadRequest(_funfzehnZeitError);
+      return TypedResults.BadRequest(_fuenfzehnZeitError);
     }
 
     return TypedResults.Ok("Home Office ended");
@@ -114,11 +114,11 @@ public class TimeController : ControllerBase
   {
     try
     {
-      await _webTerminalService.GetStatusAsync();
+      await _fuenfzehnZeitService.GetStatusAsync();
     }
     catch (HttpRequestException)
     {
-      return TypedResults.BadRequest(_funfzehnZeitError);
+      return TypedResults.BadRequest(_fuenfzehnZeitError);
     }
 
     return TypedResults.Ok("Status received");
@@ -129,11 +129,11 @@ public class TimeController : ControllerBase
   {
     try
     {
-      await _webTerminalService.GetWorkingHoursAsync();
+      await _fuenfzehnZeitService.GetWorkingHoursAsync();
     }
     catch (HttpRequestException)
     {
-      return TypedResults.BadRequest(_funfzehnZeitError);
+      return TypedResults.BadRequest(_fuenfzehnZeitError);
     }
 
     return TypedResults.Ok("Working hours received");

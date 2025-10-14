@@ -1,4 +1,4 @@
-public interface IWebTerminalService
+public interface IFuenfzehnZeitService
 {
   Task GetLoginPageAsync();
   Task LoginAsync();

@@ -1,6 +1,7 @@
-namespace FunfzehnZeit.Models;
+namespace FuenfzehnZeit.Models;
 
-public class GlobalVariables {
+public class GlobalVariables
+{
   public const string CollectionName = "GlobalVariables";
 
   public string BaseUrl { get; set; } = String.Empty;
