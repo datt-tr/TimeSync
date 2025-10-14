@@ -2,6 +2,7 @@ using System.Threading.Tasks;
 using FunfzehnZeit.Services;
 using Microsoft.AspNetCore.Mvc;
 using FunfzehnZeit.Interfaces;
+using Microsoft.AspNetCore.Http.HttpResults;
 
 namespace Funfzehnzeit.Controllers;
 
@@ -18,14 +19,19 @@ public class AuthController : ControllerBase
     _webTerminalService = webTerminalService;
   }
 
-  [HttpPost]
-  [Route("login")]
-  public async Task<IActionResult> Login()
+  [HttpPost("login")]
+  public async Task<Results<Ok<string>, BadRequest<string>>> Login()
   {
-    await _webTerminalService.GetLoginPageAsync();
+    try
+    {
+      await _webTerminalService.GetLoginPageAsync();
+      await _webTerminalService.LoginAsync();
+    }
+    catch (HttpRequestException)
+    {
+      return TypedResults.BadRequest("Failed FunfzehnZeit Server Request");
+    }
 
-    await _webTerminalService.LoginAsync();
-    _logger.LogInformation($"{nameof(Login)} Request executed");
-    return Ok("Logged in");
+    return TypedResults.Ok("Login executed");
   }
 }

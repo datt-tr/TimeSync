@@ -28,14 +28,13 @@ internal class WebTerminalService : IWebTerminalService
   public async Task GetLoginPageAsync()
   {
     using var response = await _httpClient.GetAsync(string.Empty);
-    if (response.IsSuccessStatusCode)
-    {
-      var responseString = await response.Content.ReadAsStringAsync();
-      var confirmUid = GetConfirmUidFromHtml(responseString);
-      _userSessionService.UpdateConfirmUid(confirmUid);
+    response.EnsureSuccessStatusCode();
 
-      _logger.LogDebug("ConfirmUid: {confirmUid}", confirmUid);
-    }
+    var responseString = await response.Content.ReadAsStringAsync();
+    var confirmUid = GetConfirmUidFromHtml(responseString);
+    _userSessionService.UpdateConfirmUid(confirmUid);
+
+    _logger.LogDebug("ConfirmUid: {confirmUid}", confirmUid);
   }
 
   public async Task LoginAsync()
@@ -49,17 +48,17 @@ internal class WebTerminalService : IWebTerminalService
     };
 
     using var response = await _httpClient.PostAsync(string.Empty, formData);
-    if (response.IsSuccessStatusCode)
-    {
-      var responseString = await response.Content.ReadAsStringAsync();
-      var uid = GetUidFromHtml(responseString);
-      _userSessionService.UpdateUid(uid);
-      _userSessionService.UpdateCurrentDate();
+    response.EnsureSuccessStatusCode();
 
-      _logger.LogDebug("Uid: {uid}", uid);
+    var responseString = await response.Content.ReadAsStringAsync();
+    var uid = GetUidFromHtml(responseString);
+    _userSessionService.UpdateUid(uid);
+    _userSessionService.UpdateCurrentDate();
 
-      using var followUp = await _httpClient.GetAsync($"?UID={uid}");
-    }
+    _logger.LogDebug("Uid: {uid}", uid);
+
+    using var followUp = await _httpClient.GetAsync($"?UID={uid}");
+    followUp.EnsureSuccessStatusCode();
   }
 
   public async Task StartOfficeAsync()
@@ -68,6 +67,7 @@ internal class WebTerminalService : IWebTerminalService
 
     using var formData = GetBasicFormData(0, 1, 100, 101, 0, 0);
     using var response = await _httpClient.PostAsync($"?UID={_userSessionService.GetUid()}", formData);
+    response.EnsureSuccessStatusCode();
   }
 
   public async Task EndOfficeAsync()
@@ -76,6 +76,7 @@ internal class WebTerminalService : IWebTerminalService
 
     using var formData = GetBasicFormData(0, 1, 100, 102, 0, 0);
     using var response = await _httpClient.PostAsync($"?UID={_userSessionService.GetUid()}", formData);
+    response.EnsureSuccessStatusCode();
   }
 
   public async Task StartBreakAsync()
@@ -84,6 +85,7 @@ internal class WebTerminalService : IWebTerminalService
 
     using var formData = GetBasicFormData(0, 1, 100, 103, 0, 0);
     using var response = await _httpClient.PostAsync($"?UID={_userSessionService.GetUid()}", formData);
+    response.EnsureSuccessStatusCode();
   }
 
   public async Task EndBreakAsync()
@@ -92,6 +94,7 @@ internal class WebTerminalService : IWebTerminalService
 
     using var formData = GetBasicFormData(0, 1, 100, 104, 0, 0);
     using var response = await _httpClient.PostAsync($"?UID={_userSessionService.GetUid()}", formData);
+    response.EnsureSuccessStatusCode();
   }
 
   public async Task StartHomeOfficeAsync()
@@ -100,6 +103,7 @@ internal class WebTerminalService : IWebTerminalService
 
     using var formData = GetBasicFormData(0, 1, 100, 119, 0, 0);
     using var response = await _httpClient.PostAsync($"?UID={_userSessionService.GetUid()}", formData);
+    response.EnsureSuccessStatusCode();
   }
 
   public async Task EndHomeOfficeAsync()
@@ -108,6 +112,7 @@ internal class WebTerminalService : IWebTerminalService
 
     using var formData = GetBasicFormData(0, 1, 100, 118, 0, 0);
     using var response = await _httpClient.PostAsync($"?UID={_userSessionService.GetUid()}", formData);
+    response.EnsureSuccessStatusCode();
   }
 
   public async Task GetWorkingHoursAsync()
@@ -116,12 +121,10 @@ internal class WebTerminalService : IWebTerminalService
 
     using var formData = GetBasicFormData(0, 1, 100, 113, 1, 0);
     using var response = await _httpClient.PostAsync($"?UID={_userSessionService.GetUid()}", formData);
+    response.EnsureSuccessStatusCode();
 
-    if (response.IsSuccessStatusCode)
-    {
-      var responseString = await response.Content.ReadAsStringAsync();
-      _logger.LogDebug($"Working hours: {GetWorkingHoursFromHtml(responseString)}");
-    }
+    var responseString = await response.Content.ReadAsStringAsync();
+    _logger.LogDebug("Working hours: {workingHours}", GetWorkingHoursFromHtml(responseString));
   }
 
   public async Task GetStatusAsync()
@@ -130,11 +133,10 @@ internal class WebTerminalService : IWebTerminalService
 
     using var formData = GetBasicFormData(0, 1, 100, 0, 0, 0);
     using var response = await _httpClient.PostAsync($"?UID={_userSessionService.GetUid()}", formData);
-    if (response.IsSuccessStatusCode)
-    {
-      var responseString = await response.Content.ReadAsStringAsync();
-      _logger.LogDebug("Status: {status}", GetStatusFromHtml(responseString));
-    }
+    response.EnsureSuccessStatusCode();
+
+    var responseString = await response.Content.ReadAsStringAsync();
+    _logger.LogDebug("Status: {status}", GetStatusFromHtml(responseString));
   }
 
   private MultipartFormDataContent GetBasicFormData(int pageOnly, int selectedMenu, int selectedSubMenu, int selectedFunction, int selectedValue, int selectedSubValue)
@@ -164,7 +166,7 @@ internal class WebTerminalService : IWebTerminalService
     string currentDayString = htmlDoc.DocumentNode.SelectSingleNode("//table[@class='msg_table']/tr/td").InnerText.Trim();
     string hoursPattern = @"\d{2}:\d{2}";
     var workingHours = Regex.Match(currentDayString, hoursPattern).Value;
-    
+
     return workingHours;
   }
 

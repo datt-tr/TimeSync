@@ -1,4 +1,5 @@
 using System.Runtime.CompilerServices;
+using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 
 namespace FunfzehnZeit.Controllers;
@@ -9,6 +10,7 @@ public class TimeController : ControllerBase
 {
   private readonly ILogger _logger;
   private readonly IWebTerminalService _webTerminalService;
+  private readonly string _funfzehnZeitError = "Failed FunfzehnZeit Server Request";
 
   public TimeController(IWebTerminalService webTerminalService, ILogger<TimeController> logger)
   {
@@ -18,59 +20,122 @@ public class TimeController : ControllerBase
 
 
   [HttpPost("office/start")]
-  public async Task<IActionResult> StartOffice()
+  public async Task<Results<Ok<string>, BadRequest<string>>> StartOffice()
   {
-    await _webTerminalService.StartOfficeAsync();
-    return Ok("Office started");
+    try
+    {
+      await _webTerminalService.StartOfficeAsync();
+    }
+    catch (HttpRequestException)
+    {
+      return TypedResults.BadRequest(_funfzehnZeitError);
+    }
+
+    return TypedResults.Ok("Office started");
   }
 
   [HttpPost("office/end")]
-  public async Task<IActionResult> EndOffice()
+  public async Task<Results<Ok<string>, BadRequest<string>>> EndOffice()
   {
-    await _webTerminalService.EndOfficeAsync();
-    return Ok("Office ended");
+    try
+    {
+      await _webTerminalService.EndOfficeAsync();
+    }
+    catch (HttpRequestException)
+    {
+      return TypedResults.BadRequest(_funfzehnZeitError);
+    }
+
+    return TypedResults.Ok("Office ended");
   }
 
   [HttpPost("break/start")]
-  public async Task<IActionResult> StartBreak()
+  public async Task<Results<Ok<string>, BadRequest<string>>> StartBreak()
   {
-    await _webTerminalService.StartBreakAsync();
-    return Ok("Break started");
+    try
+    {
+      await _webTerminalService.StartBreakAsync();
+    }
+    catch (HttpRequestException)
+    {
+      return TypedResults.BadRequest(_funfzehnZeitError);
+    }
+
+    return TypedResults.Ok("Break started");
   }
 
   [HttpPost("break/end")]
-  public async Task<IActionResult> EndBreak()
+  public async Task<Results<Ok<string>, BadRequest<string>>> EndBreak()
   {
-    await _webTerminalService.EndBreakAsync();
-    return Ok("Break ended");
+    try
+    {
+      await _webTerminalService.EndBreakAsync();
+    }
+    catch (HttpRequestException)
+    {
+      return TypedResults.BadRequest(_funfzehnZeitError);
+    }
+
+    return TypedResults.Ok("Break ended");
   }
 
   [HttpPost("home-office/start")]
-  public async Task<IActionResult> StartHomeOffice()
+  public async Task<Results<Ok<string>, BadRequest<string>>> StartHomeOffice()
   {
-    await _webTerminalService.StartHomeOfficeAsync();
-    return Ok("Home Office started");
+    try
+    {
+      await _webTerminalService.StartHomeOfficeAsync();
+    }
+    catch (HttpRequestException)
+    {
+      return TypedResults.BadRequest(_funfzehnZeitError);
+    }
+
+    return TypedResults.Ok("Home Office started");
   }
 
   [HttpPost("home-office/end")]
-  public async Task<IActionResult> EndHomeOffice()
+  public async Task<Results<Ok<string>, BadRequest<string>>> EndHomeOffice()
   {
-    await _webTerminalService.EndHomeOfficeAsync();
-    return Ok("Home Office ended");
+    try
+    {
+      await _webTerminalService.EndHomeOfficeAsync();
+    }
+    catch (HttpRequestException)
+    {
+      return TypedResults.BadRequest(_funfzehnZeitError);
+    }
+
+    return TypedResults.Ok("Home Office ended");
   }
 
   [HttpGet("status")]
-  public async Task<IActionResult> GetStatus()
+  public async Task<Results<Ok<string>, BadRequest<string>>> GetStatus()
   {
-    await _webTerminalService.GetStatusAsync();
-    return Ok("Status received");
+    try
+    {
+      await _webTerminalService.GetStatusAsync();
+    }
+    catch (HttpRequestException)
+    {
+      return TypedResults.BadRequest(_funfzehnZeitError);
+    }
+
+    return TypedResults.Ok("Status received");
   }
 
   [HttpGet("working-hours")]
-  public async Task<IActionResult> GetWorkingHours()
+  public async Task<Results<Ok<string>, BadRequest<string>>> GetWorkingHours()
   {
-    await _webTerminalService.GetWorkingHoursAsync();
-    return Ok("Working hours received");
-  }
+    try
+    {
+      await _webTerminalService.GetWorkingHoursAsync();
+    }
+    catch (HttpRequestException)
+    {
+      return TypedResults.BadRequest(_funfzehnZeitError);
+    }
 
+    return TypedResults.Ok("Working hours received");
+  }
 }
