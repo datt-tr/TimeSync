@@ -1,4 +1,4 @@
-namespace FuenfzehnZeit.Models;
+namespace FuenfzehnZeitWrapper.Models;
 
 public class UserSessionData
 {

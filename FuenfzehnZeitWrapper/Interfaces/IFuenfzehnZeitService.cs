@@ -1,3 +1,5 @@
+namespace FuenfzehnZeitWrapper.Interfaces;
+
 public interface IFuenfzehnZeitService
 {
   Task GetLoginPageAsync();

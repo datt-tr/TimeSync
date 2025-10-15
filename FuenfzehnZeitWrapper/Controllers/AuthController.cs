@@ -1,10 +1,8 @@
-using System.Threading.Tasks;
-using FuenfzehnZeit.Services;
 using Microsoft.AspNetCore.Mvc;
-using FuenfzehnZeit.Interfaces;
 using Microsoft.AspNetCore.Http.HttpResults;
+using FuenfzehnZeitWrapper.Interfaces;
 
-namespace Funfzehnzeit.Controllers;
+namespace FunfzehnzeitWrapper.Controllers;
 
 [ApiController]
 [Route("api/v1/[controller]")]

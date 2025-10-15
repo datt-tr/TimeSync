@@ -1,8 +1,9 @@
 using System.Runtime.CompilerServices;
+using FuenfzehnZeitWrapper.Interfaces;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 
-namespace FuenfzehnZeit.Controllers;
+namespace FuenfzehnZeitWrapper.Controllers;
 
 [ApiController]
 [Route("api/v1/[controller]")]

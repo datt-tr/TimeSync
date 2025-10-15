@@ -1,4 +1,4 @@
-namespace FuenfzehnZeit.Interfaces;
+namespace FuenfzehnZeitWrapper.Interfaces;
 
 public interface IUserSessionService
 {

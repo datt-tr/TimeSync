@@ -1,7 +1,7 @@
-using FuenfzehnZeit.Interfaces;
-using FuenfzehnZeit.Models;
+using FuenfzehnZeitWrapper.Interfaces;
+using FuenfzehnZeitWrapper.Models;
 
-namespace FuenfzehnZeit.Services;
+namespace FuenfzehnZeitWrapper.Services;
 
 internal class UserSessionService : IUserSessionService
 {

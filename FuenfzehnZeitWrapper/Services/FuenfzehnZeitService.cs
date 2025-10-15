@@ -1,12 +1,8 @@
-using System.Text.Json;
-using Azure;
-using FuenfzehnZeit.Models;
-using HtmlAgilityPack;
 using Microsoft.Extensions.Options;
-using FuenfzehnZeit.Interfaces;
-using System.Text.RegularExpressions;
+using FuenfzehnZeitWrapper.Interfaces;
+using FuenfzehnZeitWrapper.Models;
 
-namespace FuenfzehnZeit.Services;
+namespace FuenfzehnZeitWrapper.Services;
 
 internal class FuenfzehnZeitService : IFuenfzehnZeitService
 {
@@ -14,9 +10,11 @@ internal class FuenfzehnZeitService : IFuenfzehnZeitService
   private readonly GlobalVariables _globalVariables;
   private readonly IUserSessionService _userSessionService;
   private readonly ILogger _logger;
+  private readonly IFuenfzehnZeitHtmlParser _htmlParser;
 
-  public FuenfzehnZeitService(HttpClient httpClient, IOptions<GlobalVariables> globalVariables, IUserSessionService userSessionService, ILogger<FuenfzehnZeitService> logger)
+  public FuenfzehnZeitService(HttpClient httpClient, IOptions<GlobalVariables> globalVariables, IUserSessionService userSessionService, ILogger<FuenfzehnZeitService> logger, IFuenfzehnZeitHtmlParser htmlParser)
   {
+    _htmlParser = htmlParser;
     _logger = logger;
     _userSessionService = userSessionService;
     _httpClient = httpClient;
@@ -31,7 +29,7 @@ internal class FuenfzehnZeitService : IFuenfzehnZeitService
     response.EnsureSuccessStatusCode();
 
     var responseString = await response.Content.ReadAsStringAsync();
-    var confirmUid = GetConfirmUidFromHtml(responseString);
+    var confirmUid = _htmlParser.GetConfirmUid(responseString);
     _userSessionService.UpdateConfirmUid(confirmUid);
 
     _logger.LogDebug("ConfirmUid: {confirmUid}", confirmUid);
@@ -51,7 +49,7 @@ internal class FuenfzehnZeitService : IFuenfzehnZeitService
     response.EnsureSuccessStatusCode();
 
     var responseString = await response.Content.ReadAsStringAsync();
-    var uid = GetUidFromHtml(responseString);
+    var uid = _htmlParser.GetUid(responseString);
     _userSessionService.UpdateUid(uid);
     _userSessionService.UpdateCurrentDate();
 
@@ -124,7 +122,7 @@ internal class FuenfzehnZeitService : IFuenfzehnZeitService
     response.EnsureSuccessStatusCode();
 
     var responseString = await response.Content.ReadAsStringAsync();
-    _logger.LogDebug("Working hours: {workingHours}", GetWorkingHoursFromHtml(responseString));
+    _logger.LogDebug("Working hours: {workingHours}", _htmlParser.GetWorkingHours(responseString));
   }
 
   public async Task GetStatusAsync()
@@ -136,7 +134,7 @@ internal class FuenfzehnZeitService : IFuenfzehnZeitService
     response.EnsureSuccessStatusCode();
 
     var responseString = await response.Content.ReadAsStringAsync();
-    _logger.LogDebug("Status: {status}", GetStatusFromHtml(responseString));
+    _logger.LogDebug("Status: {status}", _htmlParser.GetStatus(responseString));
   }
 
   private MultipartFormDataContent GetBasicFormData(int pageOnly, int selectedMenu, int selectedSubMenu, int selectedFunction, int selectedValue, int selectedSubValue)
@@ -156,47 +154,5 @@ internal class FuenfzehnZeitService : IFuenfzehnZeitService
     };
 
     return formData;
-  }
-
-  private static string GetWorkingHoursFromHtml(string html)
-  {
-    var htmlDoc = new HtmlDocument();
-    htmlDoc.LoadHtml(html);
-
-    string currentDayString = htmlDoc.DocumentNode.SelectSingleNode("//table[@class='msg_table']/tr/td").InnerText.Trim();
-    string hoursPattern = @"\d{2}:\d{2}";
-    var workingHours = Regex.Match(currentDayString, hoursPattern).Value;
-
-    return workingHours;
-  }
-
-  private static string GetUidFromHtml(string html)
-  {
-    var htmlDoc = new HtmlDocument();
-    htmlDoc.LoadHtml(html);
-
-    string uid = htmlDoc.DocumentNode.SelectSingleNode("//meta[@http-equiv='refresh']").Attributes["content"].Value.Split("UID=")[1];
-
-    return uid;
-  }
-
-  private static string GetConfirmUidFromHtml(string html)
-  {
-    var htmlDoc = new HtmlDocument();
-    htmlDoc.LoadHtml(html);
-
-    string confirmUid = htmlDoc.DocumentNode.SelectSingleNode("//input[@name='CONFIRMUID']").Attributes["value"].Value;
-
-    return confirmUid;
-  }
-
-  private static string GetStatusFromHtml(string html)
-  {
-    var htmlDoc = new HtmlDocument();
-    htmlDoc.LoadHtml(html);
-
-    string status = htmlDoc.DocumentNode.SelectSingleNode("//td[@class='wtStatusContent']").InnerText.Trim();
-
-    return status;
   }
 }
