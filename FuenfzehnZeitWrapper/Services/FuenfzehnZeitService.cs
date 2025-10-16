@@ -131,10 +131,16 @@ internal class FuenfzehnZeitService : IFuenfzehnZeitService
 
     using var formData = GetBasicFormData(0, 1, 100, 0, 0, 0);
     using var response = await _httpClient.PostAsync($"?UID={_userSessionService.GetUid()}", formData);
-    response.EnsureSuccessStatusCode();
 
     var responseString = await response.Content.ReadAsStringAsync();
-    _logger.LogDebug("Status: {status}", _htmlParser.GetStatus(responseString));
+    if (_htmlParser.IsLoggedIn(responseString))
+    {
+      _logger.LogDebug("Status: {status}", _htmlParser.GetStatus(responseString));
+    }
+    else
+    {
+      _logger.LogDebug("Not Logged In");
+    }
   }
 
   private MultipartFormDataContent GetBasicFormData(int pageOnly, int selectedMenu, int selectedSubMenu, int selectedFunction, int selectedValue, int selectedSubValue)
