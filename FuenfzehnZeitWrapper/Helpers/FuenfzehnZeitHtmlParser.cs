@@ -13,8 +13,27 @@ internal class FuenfzehnZeitHtmlParser : IFuenfzehnZeitHtmlParser
     _logger = logger;
   }
 
+  public bool IsCorrectCredentials(string html)
+  {
+    var htmlDoc = GetHtmlDocument(html);
+
+    bool isCorrectCredentials = htmlDoc.DocumentNode.SelectSingleNode("//div[@class='fs_msg_content']")?.InnerText.Trim() != "Benutzer oder Passwort unbekannt!";
+
+    return isCorrectCredentials;
+  }
+
+  public bool IsCorrectConfirmUid(string html)
+  {
+    var htmlDoc = GetHtmlDocument(html);
+
+    bool isCorrectConfirmUid = htmlDoc.DocumentNode.SelectSingleNode("//div[@class='fs_msg_content']")?.InnerText.Trim() != "Die Anmeldung konnte nicht verifiziert werden, da die Anmeldeseite abgelaufen ist.";
+
+    return isCorrectConfirmUid;
+  }
+
   public bool IsLoggedIn(string html)
   {
+    // isLoggenIn == isCorrectUid
     var htmlDoc = GetHtmlDocument(html);
 
     bool isLoggedIn = htmlDoc.DocumentNode.SelectSingleNode("//div[@class='fs_msg_content']")?.InnerText.Trim() != "Keine Anmeldung gefunden oder Anmeldung abgelaufen";

@@ -39,7 +39,7 @@ internal class FuenfzehnZeitService : IFuenfzehnZeitService
   {
     using var formData = new MultipartFormDataContent
     {
-      { new StringContent(_userSessionService.GetConfirmUid()), "CONFIRMUID" },
+      { new StringContent("wlejf92jdjf2j3929ef"), "CONFIRMUID"},
       { new StringContent(_globalVariables.Username), "Username" },
       { new StringContent(_globalVariables.Password), "Password" },
       { new StringContent("Anmelden"), "SELECT" }
@@ -49,6 +49,21 @@ internal class FuenfzehnZeitService : IFuenfzehnZeitService
     response.EnsureSuccessStatusCode();
 
     var responseString = await response.Content.ReadAsStringAsync();
+
+    if (!_htmlParser.IsCorrectConfirmUid(responseString))
+    {
+      _logger.LogError("Wrong ConfirmUid");
+      return;
+    }
+    _logger.LogDebug("Correct ConfirmUid");
+
+    if (!_htmlParser.IsCorrectCredentials(responseString))
+    {
+      _logger.LogError("Wrong Credentials");
+      return;
+    }
+    _logger.LogDebug("Correct Credentials");
+
     var uid = _htmlParser.GetUid(responseString);
     _userSessionService.UpdateUid(uid);
     _userSessionService.UpdateCurrentDate();
