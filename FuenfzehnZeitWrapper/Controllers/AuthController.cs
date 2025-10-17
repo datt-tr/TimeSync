@@ -18,7 +18,7 @@ public class AuthController : ControllerBase
   }
 
   [HttpPost("login")]
-  public async Task<Results<Ok<string>, BadRequest<string>>> Login()
+  public async Task<Results<Ok, BadRequest<string>>> Login()
   {
     try
     {
@@ -30,6 +30,6 @@ public class AuthController : ControllerBase
       return TypedResults.BadRequest("Failed FuenfzehnZeit Server Request");
     }
 
-    return TypedResults.Ok("Login executed");
+    return TypedResults.Ok();
   }
 }

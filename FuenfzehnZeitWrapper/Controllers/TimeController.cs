@@ -19,9 +19,8 @@ public class TimeController : ControllerBase
     _fuenfzehnZeitService = fuenfzehnZeitService;
   }
 
-
   [HttpPost("office/start")]
-  public async Task<Results<Ok<string>, BadRequest<string>>> StartOffice()
+  public async Task<Results<Ok, BadRequest<string>>> StartOffice()
   {
     try
     {
@@ -32,11 +31,11 @@ public class TimeController : ControllerBase
       return TypedResults.BadRequest(_fuenfzehnZeitError);
     }
 
-    return TypedResults.Ok("Office started");
+    return TypedResults.Ok();
   }
 
   [HttpPost("office/end")]
-  public async Task<Results<Ok<string>, BadRequest<string>>> EndOffice()
+  public async Task<Results<Ok, BadRequest<string>>> EndOffice()
   {
     try
     {
@@ -47,11 +46,11 @@ public class TimeController : ControllerBase
       return TypedResults.BadRequest(_fuenfzehnZeitError);
     }
 
-    return TypedResults.Ok("Office ended");
+    return TypedResults.Ok();
   }
 
   [HttpPost("break/start")]
-  public async Task<Results<Ok<string>, BadRequest<string>>> StartBreak()
+  public async Task<Results<Ok, BadRequest<string>>> StartBreak()
   {
     try
     {
@@ -62,11 +61,11 @@ public class TimeController : ControllerBase
       return TypedResults.BadRequest(_fuenfzehnZeitError);
     }
 
-    return TypedResults.Ok("Break started");
+    return TypedResults.Ok();
   }
 
   [HttpPost("break/end")]
-  public async Task<Results<Ok<string>, BadRequest<string>>> EndBreak()
+  public async Task<Results<Ok, BadRequest<string>>> EndBreak()
   {
     try
     {
@@ -77,11 +76,11 @@ public class TimeController : ControllerBase
       return TypedResults.BadRequest(_fuenfzehnZeitError);
     }
 
-    return TypedResults.Ok("Break ended");
+    return TypedResults.Ok();
   }
 
   [HttpPost("home-office/start")]
-  public async Task<Results<Ok<string>, BadRequest<string>>> StartHomeOffice()
+  public async Task<Results<Ok, BadRequest<string>>> StartHomeOffice()
   {
     try
     {
@@ -92,11 +91,11 @@ public class TimeController : ControllerBase
       return TypedResults.BadRequest(_fuenfzehnZeitError);
     }
 
-    return TypedResults.Ok("Home Office started");
+    return TypedResults.Ok();
   }
 
   [HttpPost("home-office/end")]
-  public async Task<Results<Ok<string>, BadRequest<string>>> EndHomeOffice()
+  public async Task<Results<Ok, BadRequest<string>>> EndHomeOffice()
   {
     try
     {
@@ -107,11 +106,11 @@ public class TimeController : ControllerBase
       return TypedResults.BadRequest(_fuenfzehnZeitError);
     }
 
-    return TypedResults.Ok("Home Office ended");
+    return TypedResults.Ok();
   }
 
   [HttpGet("status")]
-  public async Task<Results<Ok<string>, BadRequest<string>>> GetStatus()
+  public async Task<Results<Ok, BadRequest<string>>> GetStatus()
   {
     try
     {
@@ -122,11 +121,11 @@ public class TimeController : ControllerBase
       return TypedResults.BadRequest(_fuenfzehnZeitError);
     }
 
-    return TypedResults.Ok("Status received");
+    return TypedResults.Ok();
   }
 
   [HttpGet("working-hours")]
-  public async Task<Results<Ok<string>, BadRequest<string>>> GetWorkingHours()
+  public async Task<Results<Ok, BadRequest<string>>> GetWorkingHours()
   {
     try
     {
@@ -137,6 +136,6 @@ public class TimeController : ControllerBase
       return TypedResults.BadRequest(_fuenfzehnZeitError);
     }
 
-    return TypedResults.Ok("Working hours received");
+    return TypedResults.Ok();
   }
 }
