@@ -23,7 +23,7 @@ internal class FuenfzehnZeitService : IFuenfzehnZeitService
     _httpClient.BaseAddress = new Uri(_globalVariables.BaseUrl);
   }
 
-  public async Task GetLoginPageAsync()
+  public async Task GetLogInPageAsync()
   {
     using var response = await _httpClient.GetAsync(string.Empty);
     response.EnsureSuccessStatusCode();
@@ -35,7 +35,7 @@ internal class FuenfzehnZeitService : IFuenfzehnZeitService
     _logger.LogDebug("ConfirmUid: {confirmUid}", confirmUid);
   }
 
-  public async Task LoginAsync()
+  public async Task LogInAsync()
   {
     using var formData = new MultipartFormDataContent
     {
@@ -57,6 +57,13 @@ internal class FuenfzehnZeitService : IFuenfzehnZeitService
 
     using var followUp = await _httpClient.GetAsync($"?UID={uid}");
     followUp.EnsureSuccessStatusCode();
+  }
+
+  public async Task LogOutAsync()
+  {
+    var uid = _userSessionService.GetUid();
+    using var response = await _httpClient.GetAsync($"?LOGOFF_x=1&UID={uid}");
+    response.EnsureSuccessStatusCode();
   }
 
   public async Task StartOfficeAsync()

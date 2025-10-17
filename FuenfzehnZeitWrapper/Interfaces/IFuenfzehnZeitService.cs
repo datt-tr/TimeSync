@@ -2,8 +2,9 @@ namespace FuenfzehnZeitWrapper.Interfaces;
 
 public interface IFuenfzehnZeitService
 {
-  Task GetLoginPageAsync();
-  Task LoginAsync();
+  Task GetLogInPageAsync();
+  Task LogInAsync();
+  Task LogOutAsync();
   Task StartOfficeAsync();
   Task EndOfficeAsync();
   Task StartBreakAsync();
