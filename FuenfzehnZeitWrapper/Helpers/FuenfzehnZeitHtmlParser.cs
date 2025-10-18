@@ -1,4 +1,5 @@
 using System.Text.RegularExpressions;
+using FuenfzehnZeitWrapper.Enums;
 using FuenfzehnZeitWrapper.Interfaces;
 using HtmlAgilityPack;
 
@@ -13,32 +14,19 @@ internal class FuenfzehnZeitHtmlParser : IFuenfzehnZeitHtmlParser
     _logger = logger;
   }
 
-  public bool IsCorrectCredentials(string html)
+  public bool ContainsError(string html, ErrorType errorType)
   {
-    var htmlDoc = GetHtmlDocument(html);
+    string errorMessage = errorType switch
+    {
+      ErrorType.WrongConfirmUid => "Die Anmeldung konnte nicht verifiziert werden, da die Anmeldeseite abgelaufen ist.",
+      ErrorType.WrongUid => "Keine Anmeldung gefunden oder Anmeldung abgelaufen",
+      ErrorType.WrongCredentials => "Benutzer oder Passwort unbekannt!",
+      _ => throw new ArgumentOutOfRangeException($"{nameof(errorType)} doesn't exist")
+    };
 
-    bool isCorrectCredentials = htmlDoc.DocumentNode.SelectSingleNode("//div[@class='fs_msg_content']")?.InnerText.Trim() != "Benutzer oder Passwort unbekannt!";
+    bool containsErrorMessage = html.Contains(errorMessage);
 
-    return isCorrectCredentials;
-  }
-
-  public bool IsCorrectConfirmUid(string html)
-  {
-    var htmlDoc = GetHtmlDocument(html);
-
-    bool isCorrectConfirmUid = htmlDoc.DocumentNode.SelectSingleNode("//div[@class='fs_msg_content']")?.InnerText.Trim() != "Die Anmeldung konnte nicht verifiziert werden, da die Anmeldeseite abgelaufen ist.";
-
-    return isCorrectConfirmUid;
-  }
-
-  public bool IsLoggedIn(string html)
-  {
-    // isLoggenIn == isCorrectUid
-    var htmlDoc = GetHtmlDocument(html);
-
-    bool isLoggedIn = htmlDoc.DocumentNode.SelectSingleNode("//div[@class='fs_msg_content']")?.InnerText.Trim() != "Keine Anmeldung gefunden oder Anmeldung abgelaufen";
-
-    return isLoggedIn;
+    return containsErrorMessage;
   }
 
   public string GetConfirmUid(string html)

@@ -1,6 +1,7 @@
 using Microsoft.Extensions.Options;
 using FuenfzehnZeitWrapper.Interfaces;
 using FuenfzehnZeitWrapper.Models;
+using FuenfzehnZeitWrapper.Enums;
 
 namespace FuenfzehnZeitWrapper.Services;
 
@@ -39,7 +40,7 @@ internal class FuenfzehnZeitService : IFuenfzehnZeitService
   {
     using var formData = new MultipartFormDataContent
     {
-      { new StringContent("wlejf92jdjf2j3929ef"), "CONFIRMUID"},
+      { new StringContent(_userSessionService.GetConfirmUid()), "CONFIRMUID"},
       { new StringContent(_globalVariables.Username), "Username" },
       { new StringContent(_globalVariables.Password), "Password" },
       { new StringContent("Anmelden"), "SELECT" }
@@ -50,14 +51,14 @@ internal class FuenfzehnZeitService : IFuenfzehnZeitService
 
     var responseString = await response.Content.ReadAsStringAsync();
 
-    if (!_htmlParser.IsCorrectConfirmUid(responseString))
+    if (_htmlParser.ContainsError(responseString, ErrorType.WrongConfirmUid))
     {
       _logger.LogError("Wrong ConfirmUid");
       return;
     }
     _logger.LogDebug("Correct ConfirmUid");
 
-    if (!_htmlParser.IsCorrectCredentials(responseString))
+    if (_htmlParser.ContainsError(responseString, ErrorType.WrongCredentials))
     {
       _logger.LogError("Wrong Credentials");
       return;
@@ -155,7 +156,7 @@ internal class FuenfzehnZeitService : IFuenfzehnZeitService
     using var response = await _httpClient.PostAsync($"?UID={_userSessionService.GetUid()}", formData);
 
     var responseString = await response.Content.ReadAsStringAsync();
-    if (_htmlParser.IsLoggedIn(responseString))
+    if (!_htmlParser.ContainsError(responseString, ErrorType.WrongUid))
     {
       _logger.LogDebug("Status: {status}", _htmlParser.GetStatus(responseString));
     }

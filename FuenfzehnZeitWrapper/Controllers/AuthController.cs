@@ -2,7 +2,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Http.HttpResults;
 using FuenfzehnZeitWrapper.Interfaces;
 
-namespace FunfzehnzeitWrapper.Controllers;
+namespace FuenfzehnzeitWrapper.Controllers;
 
 [ApiController]
 [Route("api/v1/[controller]")]

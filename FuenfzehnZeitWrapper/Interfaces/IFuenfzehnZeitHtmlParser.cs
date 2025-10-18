@@ -1,10 +1,10 @@
+using FuenfzehnZeitWrapper.Enums;
+
 namespace FuenfzehnZeitWrapper.Interfaces;
 
 public interface IFuenfzehnZeitHtmlParser
 {
-  bool IsLoggedIn(string html);
-  bool IsCorrectCredentials(string html);
-  bool IsCorrectConfirmUid(string html);
+  bool ContainsError(string html, ErrorType erroType);
   string GetConfirmUid(string html);
   string GetUid(string html);
   string GetStatus(string html);
