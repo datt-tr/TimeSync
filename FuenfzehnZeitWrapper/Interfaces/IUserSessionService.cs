@@ -2,10 +2,6 @@ namespace FuenfzehnZeitWrapper.Interfaces;
 
 public interface IUserSessionService
 {
-  void CreateSession();
-  void GetSession();
-  void DeleteSession();
-
   string GetCallNumber();
   void UpdateCallNumber();
   string GetUid();

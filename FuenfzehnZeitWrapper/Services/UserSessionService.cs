@@ -12,24 +12,14 @@ internal class UserSessionService : IUserSessionService
   {
     _logger = logger;
   }
-  public void CreateSession()
-  {
-    throw new NotImplementedException();
-  }
 
-  public void GetSession()
-  {
-    throw new NotImplementedException();
-  }
-
-  public void DeleteSession()
-  {
-    throw new NotImplementedException();
-  }
   public string GetUid()
   {
-    _logger.LogDebug($"{nameof(GetUid)} retrieves {_userSession.Uid}");
-    return _userSession.Uid;
+    var uid = _userSession.Uid;
+    
+    _logger.LogDebug("{GetUid} retrieves {uid}", nameof(GetUid), uid);
+    
+    return uid;
   }
 
   public void UpdateUid(string uid)
@@ -39,8 +29,11 @@ internal class UserSessionService : IUserSessionService
 
   public string GetCallNumber()
   {
-    _logger.LogDebug($"{nameof(GetCallNumber)} retrieves {_userSession.CallNumber}");
-    return _userSession.CallNumber.ToString();
+    var callNumber = _userSession.CallNumber.ToString();
+    
+    _logger.LogDebug("{GetCallNumber} retrieves {callNumber}", nameof(GetCallNumber), callNumber);
+    
+    return callNumber;
   }
 
   public void UpdateCallNumber()
@@ -50,8 +43,11 @@ internal class UserSessionService : IUserSessionService
 
   public string GetConfirmUid()
   {
-    _logger.LogDebug($"{nameof(GetConfirmUid)} retrieves {_userSession.ConfirmUid}");
-    return _userSession.ConfirmUid;
+    var confirmUid = _userSession.ConfirmUid; 
+    
+    _logger.LogDebug("{GetConfirmUid} retrieves {confirmUid}", nameof(GetConfirmUid), confirmUid);
+
+    return confirmUid;
   }
 
   public void UpdateConfirmUid(string confirmUid)
@@ -61,8 +57,11 @@ internal class UserSessionService : IUserSessionService
 
   public string GetCurrentDate()
   {
-    _logger.LogDebug($"{nameof(GetCurrentDate)} retrieves {_userSession.CurrentDate}");
-    return _userSession.CurrentDate.Date.ToString("dd.MM.yyyy");
+    var currentDate = _userSession.CurrentDate.Date.ToString("dd.MM.yyyy");
+
+    _logger.LogDebug("{GetCurrentDate} retrieves {currentDate}", nameof(GetCurrentDate), currentDate);
+
+    return currentDate;
   }
 
   public void UpdateCurrentDate()
