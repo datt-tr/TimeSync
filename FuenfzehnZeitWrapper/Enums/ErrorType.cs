@@ -4,5 +4,6 @@ public enum ErrorType
 {
   WrongCredentials,
   WrongConfirmUid,
-  WrongUid
+  WrongUid,
+  WrongCallNumber
 }

@@ -91,7 +91,7 @@ internal class FuenfzehnZeitService : IFuenfzehnZeitService
     response.EnsureSuccessStatusCode();
 
     var responseString = await response.Content.ReadAsStringAsync();
-    if (!IsLoggedIn(responseString)) return;
+    if (!IsLoggedIn(responseString) || !IsCorrectOrder(responseString)) return;
 
     _userSessionService.UpdateCallNumber();
   }
@@ -103,7 +103,7 @@ internal class FuenfzehnZeitService : IFuenfzehnZeitService
     response.EnsureSuccessStatusCode();
 
     var responseString = await response.Content.ReadAsStringAsync();
-    if (!IsLoggedIn(responseString)) return;
+    if (!IsLoggedIn(responseString) || !IsCorrectOrder(responseString)) return;
 
     _userSessionService.UpdateCallNumber();
   }
@@ -115,7 +115,7 @@ internal class FuenfzehnZeitService : IFuenfzehnZeitService
     response.EnsureSuccessStatusCode();
 
     var responseString = await response.Content.ReadAsStringAsync();
-    if (!IsLoggedIn(responseString)) return;
+    if (!IsLoggedIn(responseString) || !IsCorrectOrder(responseString)) return;
 
     _userSessionService.UpdateCallNumber();
   }
@@ -127,7 +127,7 @@ internal class FuenfzehnZeitService : IFuenfzehnZeitService
     response.EnsureSuccessStatusCode();
 
     var responseString = await response.Content.ReadAsStringAsync();
-    if (!IsLoggedIn(responseString)) return;
+    if (!IsLoggedIn(responseString) || !IsCorrectOrder(responseString)) return;
 
     _userSessionService.UpdateCallNumber();
   }
@@ -139,7 +139,7 @@ internal class FuenfzehnZeitService : IFuenfzehnZeitService
     response.EnsureSuccessStatusCode();
 
     var responseString = await response.Content.ReadAsStringAsync();
-    if (!IsLoggedIn(responseString)) return;
+    if (!IsLoggedIn(responseString) || !IsCorrectOrder(responseString)) return;
 
     _userSessionService.UpdateCallNumber();
   }
@@ -151,7 +151,7 @@ internal class FuenfzehnZeitService : IFuenfzehnZeitService
     response.EnsureSuccessStatusCode();
 
     var responseString = await response.Content.ReadAsStringAsync();
-    if (!IsLoggedIn(responseString)) return;
+    if (!IsLoggedIn(responseString) || !IsCorrectOrder(responseString)) return;
 
     _userSessionService.UpdateCallNumber();
   }
@@ -163,7 +163,7 @@ internal class FuenfzehnZeitService : IFuenfzehnZeitService
     response.EnsureSuccessStatusCode();
 
     var responseString = await response.Content.ReadAsStringAsync();
-    if (!IsLoggedIn(responseString)) return;
+    if (!IsLoggedIn(responseString) || !IsCorrectOrder(responseString)) return;
 
     _logger.LogDebug("Working hours: {workingHours}", _htmlParser.GetWorkingHours(responseString));
 
@@ -177,7 +177,7 @@ internal class FuenfzehnZeitService : IFuenfzehnZeitService
     response.EnsureSuccessStatusCode();
 
     var responseString = await response.Content.ReadAsStringAsync();
-    if (!IsLoggedIn(responseString)) return;
+    if (!IsLoggedIn(responseString) || !IsCorrectOrder(responseString)) return;
 
     _logger.LogDebug("Status: {status}", _htmlParser.GetStatus(responseString));
 
@@ -188,7 +188,19 @@ internal class FuenfzehnZeitService : IFuenfzehnZeitService
   {
     if (_htmlParser.ContainsError(html, ErrorType.WrongUid))
     {
-      _logger.LogError("Not Logged In");
+      _logger.LogError("Not Logged In ({error})", nameof(ErrorType.WrongUid));
+
+      return false;
+    }
+
+    return true;
+  }
+
+  private bool IsCorrectOrder(string html)
+  {
+    if (_htmlParser.ContainsError(html, ErrorType.WrongCallNumber))
+    {
+      _logger.LogError("Wrong Order ({error})", nameof(ErrorType.WrongCallNumber));
 
       return false;
     }
