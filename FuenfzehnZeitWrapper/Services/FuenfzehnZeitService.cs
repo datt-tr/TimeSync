@@ -56,14 +56,12 @@ internal class FuenfzehnZeitService : IFuenfzehnZeitService
       _logger.LogError("Wrong ConfirmUid");
       return;
     }
-    _logger.LogDebug("Correct ConfirmUid");
 
     if (_htmlParser.ContainsError(responseString, ErrorType.WrongCredentials))
     {
       _logger.LogError("Wrong Credentials");
       return;
     }
-    _logger.LogDebug("Correct Credentials");
 
     var uid = _htmlParser.GetUid(responseString);
     _userSessionService.UpdateUid(uid);
@@ -71,6 +69,7 @@ internal class FuenfzehnZeitService : IFuenfzehnZeitService
 
     _logger.LogDebug("Uid: {uid}", uid);
 
+    // FuenfzehnZeit requires to be redirected to this page to continue
     using var followUp = await _httpClient.GetAsync($"?UID={uid}");
     followUp.EnsureSuccessStatusCode();
   }
@@ -80,90 +79,121 @@ internal class FuenfzehnZeitService : IFuenfzehnZeitService
     var uid = _userSessionService.GetUid();
     using var response = await _httpClient.GetAsync($"?LOGOFF_x=1&UID={uid}");
     response.EnsureSuccessStatusCode();
+
+    var responseString = await response.Content.ReadAsStringAsync();
+    if (!IsLoggedIn(responseString)) return;
   }
 
   public async Task StartOfficeAsync()
   {
-    _userSessionService.UpdateCallNumber();
-
     using var formData = GetBasicFormData(0, 1, 100, 101, 0, 0);
     using var response = await _httpClient.PostAsync($"?UID={_userSessionService.GetUid()}", formData);
     response.EnsureSuccessStatusCode();
+
+    var responseString = await response.Content.ReadAsStringAsync();
+    if (!IsLoggedIn(responseString)) return;
+
+    _userSessionService.UpdateCallNumber();
   }
 
   public async Task EndOfficeAsync()
   {
-    _userSessionService.UpdateCallNumber();
-
     using var formData = GetBasicFormData(0, 1, 100, 102, 0, 0);
     using var response = await _httpClient.PostAsync($"?UID={_userSessionService.GetUid()}", formData);
     response.EnsureSuccessStatusCode();
+
+    var responseString = await response.Content.ReadAsStringAsync();
+    if (!IsLoggedIn(responseString)) return;
+
+    _userSessionService.UpdateCallNumber();
   }
 
   public async Task StartBreakAsync()
   {
-    _userSessionService.UpdateCallNumber();
-
     using var formData = GetBasicFormData(0, 1, 100, 103, 0, 0);
     using var response = await _httpClient.PostAsync($"?UID={_userSessionService.GetUid()}", formData);
     response.EnsureSuccessStatusCode();
+
+    var responseString = await response.Content.ReadAsStringAsync();
+    if (!IsLoggedIn(responseString)) return;
+
+    _userSessionService.UpdateCallNumber();
   }
 
   public async Task EndBreakAsync()
   {
-    _userSessionService.UpdateCallNumber();
-
     using var formData = GetBasicFormData(0, 1, 100, 104, 0, 0);
     using var response = await _httpClient.PostAsync($"?UID={_userSessionService.GetUid()}", formData);
     response.EnsureSuccessStatusCode();
+
+    var responseString = await response.Content.ReadAsStringAsync();
+    if (!IsLoggedIn(responseString)) return;
+
+    _userSessionService.UpdateCallNumber();
   }
 
   public async Task StartHomeOfficeAsync()
   {
-    _userSessionService.UpdateCallNumber();
-
     using var formData = GetBasicFormData(0, 1, 100, 119, 0, 0);
     using var response = await _httpClient.PostAsync($"?UID={_userSessionService.GetUid()}", formData);
     response.EnsureSuccessStatusCode();
+
+    var responseString = await response.Content.ReadAsStringAsync();
+    if (!IsLoggedIn(responseString)) return;
+
+    _userSessionService.UpdateCallNumber();
   }
 
   public async Task EndHomeOfficeAsync()
   {
-    _userSessionService.UpdateCallNumber();
-
     using var formData = GetBasicFormData(0, 1, 100, 118, 0, 0);
     using var response = await _httpClient.PostAsync($"?UID={_userSessionService.GetUid()}", formData);
     response.EnsureSuccessStatusCode();
+
+    var responseString = await response.Content.ReadAsStringAsync();
+    if (!IsLoggedIn(responseString)) return;
+
+    _userSessionService.UpdateCallNumber();
   }
 
   public async Task GetWorkingHoursAsync()
   {
-    _userSessionService.UpdateCallNumber();
-
     using var formData = GetBasicFormData(0, 1, 100, 113, 1, 0);
     using var response = await _httpClient.PostAsync($"?UID={_userSessionService.GetUid()}", formData);
     response.EnsureSuccessStatusCode();
 
     var responseString = await response.Content.ReadAsStringAsync();
+    if (!IsLoggedIn(responseString)) return;
+
     _logger.LogDebug("Working hours: {workingHours}", _htmlParser.GetWorkingHours(responseString));
+
+    _userSessionService.UpdateCallNumber();
   }
 
   public async Task GetStatusAsync()
   {
-    _userSessionService.UpdateCallNumber();
-
     using var formData = GetBasicFormData(0, 1, 100, 0, 0, 0);
     using var response = await _httpClient.PostAsync($"?UID={_userSessionService.GetUid()}", formData);
+    response.EnsureSuccessStatusCode();
 
     var responseString = await response.Content.ReadAsStringAsync();
-    if (!_htmlParser.ContainsError(responseString, ErrorType.WrongUid))
+    if (!IsLoggedIn(responseString)) return;
+
+    _logger.LogDebug("Status: {status}", _htmlParser.GetStatus(responseString));
+
+    _userSessionService.UpdateCallNumber();
+  }
+
+  private bool IsLoggedIn(string html)
+  {
+    if (_htmlParser.ContainsError(html, ErrorType.WrongUid))
     {
-      _logger.LogDebug("Status: {status}", _htmlParser.GetStatus(responseString));
+      _logger.LogError("Not Logged In");
+
+      return false;
     }
-    else
-    {
-      _logger.LogDebug("Not Logged In");
-    }
+
+    return true;
   }
 
   private MultipartFormDataContent GetBasicFormData(int pageOnly, int selectedMenu, int selectedSubMenu, int selectedFunction, int selectedValue, int selectedSubValue)

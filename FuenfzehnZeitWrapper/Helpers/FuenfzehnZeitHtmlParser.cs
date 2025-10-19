@@ -21,12 +21,10 @@ internal class FuenfzehnZeitHtmlParser : IFuenfzehnZeitHtmlParser
       ErrorType.WrongConfirmUid => "Die Anmeldung konnte nicht verifiziert werden, da die Anmeldeseite abgelaufen ist.",
       ErrorType.WrongUid => "Keine Anmeldung gefunden oder Anmeldung abgelaufen",
       ErrorType.WrongCredentials => "Benutzer oder Passwort unbekannt!",
-      _ => throw new ArgumentOutOfRangeException($"{nameof(errorType)} doesn't exist")
+      _ => throw new ArgumentOutOfRangeException($"{errorType} doesn't exist")
     };
 
-    bool containsErrorMessage = html.Contains(errorMessage);
-
-    return containsErrorMessage;
+    return html.Contains(errorMessage);
   }
 
   public string GetConfirmUid(string html)
