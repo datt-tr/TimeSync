@@ -152,47 +152,53 @@ internal class FuenfzehnZeitService : IFuenfzehnZeitService
     _userSessionService.UpdateCallNumber();
   }
 
-  public async Task GetWorkingHoursAsync()
+  public async Task<string> GetWorkingHoursAsync()
   {
     using var formData = _formDataBuilder.Build(RequestType.GetWorkingHours);
     using var response = await _httpClient.PostAsync($"?UID={_userSessionService.GetUid()}", formData);
     response.EnsureSuccessStatusCode();
 
     var responseString = await response.Content.ReadAsStringAsync();
-    if (!IsLoggedIn(responseString) || !IsValidOrder(responseString)) return;
+    if (!IsLoggedIn(responseString) || !IsValidOrder(responseString)) throw new InvalidOperationException();
 
-    _logger.LogDebug("Working hours: {workingHours}", _htmlParser.GetWorkingHours(responseString));
+    var workingHours = _htmlParser.GetWorkingHours(responseString);
+    _logger.LogDebug("Working hours: {workingHours}", workingHours);
 
     _userSessionService.UpdateCallNumber();
+
+    return workingHours;
   }
 
-  public async Task GetStatusAsync()
+  public async Task<string> GetStatusAsync()
   {
     using var formData = _formDataBuilder.Build(RequestType.GetStatus);
     using var response = await _httpClient.PostAsync($"?UID={_userSessionService.GetUid()}", formData);
     response.EnsureSuccessStatusCode();
 
     var responseString = await response.Content.ReadAsStringAsync();
-    if (!IsLoggedIn(responseString) || !IsValidOrder(responseString)) return;
+    if (!IsLoggedIn(responseString) || !IsValidOrder(responseString)) throw new InvalidOperationException();
 
-    _logger.LogDebug("Status: {status}", _htmlParser.GetStatus(responseString));
-
-    _userSessionService.UpdateCallNumber();
-  }
-
-  private async Task<string> SendWebTerminalRequestAsync(RequestType type)
-  {
-    using var formData = _formDataBuilder.Build(type);
-    using var response = await _httpClient.PostAsync($"?UID={_userSessionService.GetUid()}", formData);
-    response.EnsureSuccessStatusCode();
-
-    var responseString = await response.Content.ReadAsStringAsync();
-    if (!IsLoggedIn(responseString) || !IsValidOrder(responseString)) return string.Empty;
+    var status = _htmlParser.GetStatus(responseString);
+    _logger.LogDebug("Status: {status}", status);
 
     _userSessionService.UpdateCallNumber();
 
-    return responseString;
+    return status;
   }
+
+  // private async Task<string> SendWebTerminalRequestAsync(RequestType type)
+  // {
+  //   using var formData = _formDataBuilder.Build(type);
+  //   using var response = await _httpClient.PostAsync($"?UID={_userSessionService.GetUid()}", formData);
+  //   response.EnsureSuccessStatusCode();
+
+  //   var responseString = await response.Content.ReadAsStringAsync();
+  //   if (!IsLoggedIn(responseString) || !IsValidOrder(responseString)) return string.Empty;
+
+  //   _userSessionService.UpdateCallNumber();
+
+  //   return responseString;
+  // }
 
   private bool IsLoggedIn(string html)
   {

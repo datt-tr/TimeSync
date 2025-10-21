@@ -110,32 +110,38 @@ public class TimeController : ControllerBase
   }
 
   [HttpGet("status")]
-  public async Task<Results<Ok, BadRequest<string>>> GetStatus()
+  public async Task<Results<Ok<string>, BadRequest<string>>> GetStatus()
   {
     try
     {
-      await _fuenfzehnZeitService.GetStatusAsync();
+      var status = await _fuenfzehnZeitService.GetStatusAsync();
+      return TypedResults.Ok(status);
     }
     catch (HttpRequestException)
     {
       return TypedResults.BadRequest(_fuenfzehnZeitError);
     }
-
-    return TypedResults.Ok();
+    catch (InvalidOperationException)
+    {
+      return TypedResults.BadRequest($"{nameof(GetStatus)} is not possible");
+    }
   }
 
   [HttpGet("working-hours")]
-  public async Task<Results<Ok, BadRequest<string>>> GetWorkingHours()
+  public async Task<Results<Ok<string>, BadRequest<string>>> GetWorkingHours()
   {
     try
     {
-      await _fuenfzehnZeitService.GetWorkingHoursAsync();
+      var workingHours = await _fuenfzehnZeitService.GetWorkingHoursAsync();
+      return TypedResults.Ok(workingHours);
     }
     catch (HttpRequestException)
     {
       return TypedResults.BadRequest(_fuenfzehnZeitError);
     }
-
-    return TypedResults.Ok();
+    catch (InvalidOperationException)
+    {
+      return TypedResults.BadRequest($"{nameof(GetWorkingHours)} is not possible");
+    }
   }
 }

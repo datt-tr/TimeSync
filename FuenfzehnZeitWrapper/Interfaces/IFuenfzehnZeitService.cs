@@ -11,6 +11,6 @@ public interface IFuenfzehnZeitService
   Task EndBreakAsync();
   Task StartHomeOfficeAsync();
   Task EndHomeOfficeAsync();
-  Task GetStatusAsync();
-  Task GetWorkingHoursAsync();
+  Task<string> GetStatusAsync();
+  Task<string> GetWorkingHoursAsync();
 }
