@@ -16,7 +16,7 @@ builder.Services.AddHttpClient<IFuenfzehnZeitService, FuenfzehnZeitService>();
 
 builder.Services.AddSingleton<IUserSessionService, UserSessionService>();
 builder.Services.AddScoped<IFuenfzehnZeitHtmlParser, FuenfzehnZeitHtmlParser>();
-
+builder.Services.AddScoped<IFormDataBuilder, FormDataBuilder>();
 
 var app = builder.Build();
 

@@ -12,9 +12,11 @@ internal class FuenfzehnZeitService : IFuenfzehnZeitService
   private readonly IUserSessionService _userSessionService;
   private readonly ILogger _logger;
   private readonly IFuenfzehnZeitHtmlParser _htmlParser;
+  private readonly IFormDataBuilder _formDataBuilder;
 
-  public FuenfzehnZeitService(HttpClient httpClient, IOptions<GlobalVariables> globalVariables, IUserSessionService userSessionService, ILogger<FuenfzehnZeitService> logger, IFuenfzehnZeitHtmlParser htmlParser)
+  public FuenfzehnZeitService(HttpClient httpClient, IOptions<GlobalVariables> globalVariables, IUserSessionService userSessionService, ILogger<FuenfzehnZeitService> logger, IFuenfzehnZeitHtmlParser htmlParser, IFormDataBuilder formDataBuilder)
   {
+    _formDataBuilder = formDataBuilder;
     _htmlParser = htmlParser;
     _logger = logger;
     _userSessionService = userSessionService;
@@ -38,28 +40,22 @@ internal class FuenfzehnZeitService : IFuenfzehnZeitService
 
   public async Task LogInAsync()
   {
-    using var formData = new MultipartFormDataContent
-    {
-      { new StringContent(_userSessionService.GetConfirmUid()), "CONFIRMUID"},
-      { new StringContent(_globalVariables.Username), "Username" },
-      { new StringContent(_globalVariables.Password), "Password" },
-      { new StringContent("Anmelden"), "SELECT" }
-    };
+    using var formData = _formDataBuilder.Build(RequestType.LogIn);
 
     using var response = await _httpClient.PostAsync(string.Empty, formData);
     response.EnsureSuccessStatusCode();
 
     var responseString = await response.Content.ReadAsStringAsync();
 
-    if (_htmlParser.ContainsError(responseString, ErrorType.WrongConfirmUid))
+    if (_htmlParser.ContainsError(responseString, ErrorType.InvalidConfirmUid))
     {
-      _logger.LogError("Wrong ConfirmUid");
+      _logger.LogError("Invalid ConfirmUid");
       return;
     }
 
-    if (_htmlParser.ContainsError(responseString, ErrorType.WrongCredentials))
+    if (_htmlParser.ContainsError(responseString, ErrorType.InvalidCredentials))
     {
-      _logger.LogError("Wrong Credentials");
+      _logger.LogError("Invalid Credentials");
       return;
     }
 
@@ -86,84 +82,84 @@ internal class FuenfzehnZeitService : IFuenfzehnZeitService
 
   public async Task StartOfficeAsync()
   {
-    using var formData = GetBasicFormData(0, 1, 100, 101, 0, 0);
+    using var formData = _formDataBuilder.Build(RequestType.StartOffice);
     using var response = await _httpClient.PostAsync($"?UID={_userSessionService.GetUid()}", formData);
     response.EnsureSuccessStatusCode();
 
     var responseString = await response.Content.ReadAsStringAsync();
-    if (!IsLoggedIn(responseString) || !IsCorrectOrder(responseString)) return;
+    if (!IsLoggedIn(responseString) || !IsValidOrder(responseString)) return;
 
     _userSessionService.UpdateCallNumber();
   }
 
   public async Task EndOfficeAsync()
   {
-    using var formData = GetBasicFormData(0, 1, 100, 102, 0, 0);
+    using var formData = _formDataBuilder.Build(RequestType.EndOffice);
     using var response = await _httpClient.PostAsync($"?UID={_userSessionService.GetUid()}", formData);
     response.EnsureSuccessStatusCode();
 
     var responseString = await response.Content.ReadAsStringAsync();
-    if (!IsLoggedIn(responseString) || !IsCorrectOrder(responseString)) return;
+    if (!IsLoggedIn(responseString) || !IsValidOrder(responseString)) return;
 
     _userSessionService.UpdateCallNumber();
   }
 
   public async Task StartBreakAsync()
   {
-    using var formData = GetBasicFormData(0, 1, 100, 103, 0, 0);
+    using var formData = _formDataBuilder.Build(RequestType.StartBreak);
     using var response = await _httpClient.PostAsync($"?UID={_userSessionService.GetUid()}", formData);
     response.EnsureSuccessStatusCode();
 
     var responseString = await response.Content.ReadAsStringAsync();
-    if (!IsLoggedIn(responseString) || !IsCorrectOrder(responseString)) return;
+    if (!IsLoggedIn(responseString) || !IsValidOrder(responseString)) return;
 
     _userSessionService.UpdateCallNumber();
   }
 
   public async Task EndBreakAsync()
   {
-    using var formData = GetBasicFormData(0, 1, 100, 104, 0, 0);
+    using var formData = _formDataBuilder.Build(RequestType.EndBreak);
     using var response = await _httpClient.PostAsync($"?UID={_userSessionService.GetUid()}", formData);
     response.EnsureSuccessStatusCode();
 
     var responseString = await response.Content.ReadAsStringAsync();
-    if (!IsLoggedIn(responseString) || !IsCorrectOrder(responseString)) return;
+    if (!IsLoggedIn(responseString) || !IsValidOrder(responseString)) return;
 
     _userSessionService.UpdateCallNumber();
   }
 
   public async Task StartHomeOfficeAsync()
   {
-    using var formData = GetBasicFormData(0, 1, 100, 119, 0, 0);
+    using var formData = _formDataBuilder.Build(RequestType.StartHomeOffice);
     using var response = await _httpClient.PostAsync($"?UID={_userSessionService.GetUid()}", formData);
     response.EnsureSuccessStatusCode();
 
     var responseString = await response.Content.ReadAsStringAsync();
-    if (!IsLoggedIn(responseString) || !IsCorrectOrder(responseString)) return;
+    if (!IsLoggedIn(responseString) || !IsValidOrder(responseString)) return;
 
     _userSessionService.UpdateCallNumber();
   }
 
   public async Task EndHomeOfficeAsync()
   {
-    using var formData = GetBasicFormData(0, 1, 100, 118, 0, 0);
+    using var formData = _formDataBuilder.Build(RequestType.EndHomeOffice);
     using var response = await _httpClient.PostAsync($"?UID={_userSessionService.GetUid()}", formData);
     response.EnsureSuccessStatusCode();
 
     var responseString = await response.Content.ReadAsStringAsync();
-    if (!IsLoggedIn(responseString) || !IsCorrectOrder(responseString)) return;
+    if (!IsLoggedIn(responseString) || !IsValidOrder(responseString)) return;
 
     _userSessionService.UpdateCallNumber();
   }
 
   public async Task GetWorkingHoursAsync()
   {
-    using var formData = GetBasicFormData(0, 1, 100, 113, 1, 0);
+    using var formData = _formDataBuilder.Build(RequestType.GetWorkingHours);
     using var response = await _httpClient.PostAsync($"?UID={_userSessionService.GetUid()}", formData);
     response.EnsureSuccessStatusCode();
 
     var responseString = await response.Content.ReadAsStringAsync();
-    if (!IsLoggedIn(responseString) || !IsCorrectOrder(responseString)) return;
+    if (!IsLoggedIn(responseString) || !IsValidOrder(responseString)) return;
 
     _logger.LogDebug("Working hours: {workingHours}", _htmlParser.GetWorkingHours(responseString));
 
@@ -172,23 +168,37 @@ internal class FuenfzehnZeitService : IFuenfzehnZeitService
 
   public async Task GetStatusAsync()
   {
-    using var formData = GetBasicFormData(0, 1, 100, 0, 0, 0);
+    using var formData = _formDataBuilder.Build(RequestType.GetStatus);
     using var response = await _httpClient.PostAsync($"?UID={_userSessionService.GetUid()}", formData);
     response.EnsureSuccessStatusCode();
 
     var responseString = await response.Content.ReadAsStringAsync();
-    if (!IsLoggedIn(responseString) || !IsCorrectOrder(responseString)) return;
+    if (!IsLoggedIn(responseString) || !IsValidOrder(responseString)) return;
 
     _logger.LogDebug("Status: {status}", _htmlParser.GetStatus(responseString));
 
     _userSessionService.UpdateCallNumber();
   }
 
+  private async Task<string> SendWebTerminalRequestAsync(RequestType type)
+  {
+    using var formData = _formDataBuilder.Build(type);
+    using var response = await _httpClient.PostAsync($"?UID={_userSessionService.GetUid()}", formData);
+    response.EnsureSuccessStatusCode();
+
+    var responseString = await response.Content.ReadAsStringAsync();
+    if (!IsLoggedIn(responseString) || !IsValidOrder(responseString)) return string.Empty;
+
+    _userSessionService.UpdateCallNumber();
+
+    return responseString;
+  }
+
   private bool IsLoggedIn(string html)
   {
-    if (_htmlParser.ContainsError(html, ErrorType.WrongUid))
+    if (_htmlParser.ContainsError(html, ErrorType.InvalidUid))
     {
-      _logger.LogError("Not Logged In ({error})", nameof(ErrorType.WrongUid));
+      _logger.LogError("Not Logged In ({error})", nameof(ErrorType.InvalidUid));
 
       return false;
     }
@@ -196,34 +206,15 @@ internal class FuenfzehnZeitService : IFuenfzehnZeitService
     return true;
   }
 
-  private bool IsCorrectOrder(string html)
+  private bool IsValidOrder(string html)
   {
-    if (_htmlParser.ContainsError(html, ErrorType.WrongCallNumber))
+    if (_htmlParser.ContainsError(html, ErrorType.InvalidCallNumber))
     {
-      _logger.LogError("Wrong Order ({error})", nameof(ErrorType.WrongCallNumber));
+      _logger.LogError("Wrong Order ({error})", nameof(ErrorType.InvalidCallNumber));
 
       return false;
     }
 
     return true;
-  }
-
-  private MultipartFormDataContent GetBasicFormData(int pageOnly, int selectedMenu, int selectedSubMenu, int selectedFunction, int selectedValue, int selectedSubValue)
-  {
-    var formData = new MultipartFormDataContent()
-    {
-      {new StringContent(_userSessionService.GetCallNumber()), "CALL_NO" },
-      {new StringContent(_userSessionService.GetUid()), "UID"},
-      {new StringContent("ZZStandard.css"), "CSS_FILE"},
-      {new StringContent(pageOnly.ToString()), "PAGEONLY"},
-      {new StringContent(selectedMenu.ToString()), "SELECTED_MENU"},
-      {new StringContent(selectedSubMenu.ToString()), "SELECTED_SUB_MENU"},
-      {new StringContent(_userSessionService.GetCurrentDate()), "SELECTED_DATE"},
-      {new StringContent(selectedFunction.ToString()), "SELECTED_FUNCTION"},
-      {new StringContent(selectedValue.ToString()), "SELECTED_VALUE"},
-      {new StringContent(selectedSubValue.ToString()), "SELECTED_SUB_VALUE"},
-    };
-
-    return formData;
   }
 }

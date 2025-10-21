@@ -18,10 +18,10 @@ internal class FuenfzehnZeitHtmlParser : IFuenfzehnZeitHtmlParser
   {
     string errorMessage = errorType switch
     {
-      ErrorType.WrongConfirmUid => "Die Anmeldung konnte nicht verifiziert werden, da die Anmeldeseite abgelaufen ist.",
-      ErrorType.WrongUid => "Keine Anmeldung gefunden oder Anmeldung abgelaufen",
-      ErrorType.WrongCredentials => "Benutzer oder Passwort unbekannt!",
-      ErrorType.WrongCallNumber => "Function is not executed again",
+      ErrorType.InvalidConfirmUid => "Die Anmeldung konnte nicht verifiziert werden, da die Anmeldeseite abgelaufen ist.",
+      ErrorType.InvalidUid => "Keine Anmeldung gefunden oder Anmeldung abgelaufen",
+      ErrorType.InvalidCredentials => "Benutzer oder Passwort unbekannt!",
+      ErrorType.InvalidCallNumber => "Function is not executed again",
       _ => throw new ArgumentOutOfRangeException($"{errorType} doesn't exist")
     };
 

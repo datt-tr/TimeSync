@@ -2,8 +2,8 @@ namespace FuenfzehnZeitWrapper.Enums;
 
 public enum ErrorType
 {
-  WrongCredentials,
-  WrongConfirmUid,
-  WrongUid,
-  WrongCallNumber
+  InvalidCredentials,
+  InvalidConfirmUid,
+  InvalidUid,
+  InvalidCallNumber
 }
