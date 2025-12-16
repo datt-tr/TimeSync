@@ -13,10 +13,10 @@ namespace EchoBot.Bots
     {
         protected override async Task OnMessageActivityAsync(ITurnContext<IMessageActivity> turnContext, CancellationToken cancellationToken)
         {
-            var replyText = $"Echo (Joern test): {turnContext.Activity.Text}";
+            var replyText = $"Echo (Id Test): {turnContext.Activity.Text}";
             await turnContext.SendActivityAsync(MessageFactory.Text(replyText, replyText), cancellationToken);
-            await turnContext.SendActivityAsync(MessageFactory.Text(turnContext.Activity.From.ToString()));
-            await turnContext.SendActivityAsync(MessageFactory.Text("Id test"));
+            await turnContext.SendActivityAsync(MessageFactory.Text(turnContext.Activity.From.Id));
+            await turnContext.SendActivityAsync(MessageFactory.Text(turnContext.Activity.Conversation.Id));
         }
 
         protected override async Task OnMembersAddedAsync(IList<ChannelAccount> membersAdded, ITurnContext<IConversationUpdateActivity> turnContext, CancellationToken cancellationToken)
