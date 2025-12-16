@@ -1,5 +1,6 @@
 ﻿// Generated with EchoBot .NET Template version v4.22.0
 
+using System;
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
@@ -14,6 +15,8 @@ namespace EchoBot.Bots
         {
             var replyText = $"Echo (Joern test): {turnContext.Activity.Text}";
             await turnContext.SendActivityAsync(MessageFactory.Text(replyText, replyText), cancellationToken);
+            await turnContext.SendActivityAsync(MessageFactory.Text(turnContext.Activity.From.ToString()));
+            await turnContext.SendActivityAsync(MessageFactory.Text("Id test"));
         }
 
         protected override async Task OnMembersAddedAsync(IList<ChannelAccount> membersAdded, ITurnContext<IConversationUpdateActivity> turnContext, CancellationToken cancellationToken)
