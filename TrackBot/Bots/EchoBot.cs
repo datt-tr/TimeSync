@@ -1,5 +1,6 @@
 ﻿// Generated with EchoBot .NET Template version v4.22.0
 
+using System;
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
@@ -24,6 +25,8 @@ namespace EchoBot.Bots
                 if (member.Id != turnContext.Activity.Recipient.Id)
                 {
                     await turnContext.SendActivityAsync(MessageFactory.Text(welcomeText, welcomeText), cancellationToken);
+                    await turnContext.SendActivityAsync(MessageFactory.Text(turnContext.Activity.From.ToString()));
+                    await turnContext.SendActivityAsync(MessageFactory.Text("Id test"));
                 }
             }
         }
