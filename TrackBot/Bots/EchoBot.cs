@@ -11,12 +11,28 @@ namespace EchoBot.Bots
 {
     public class EchoBot : ActivityHandler
     {
+        private readonly IFuenfzehnZeitWrapper _fuenfzehnZeitWrapper;
+
+        public EchoBot(IFuenfzehnZeitWrapper fuenfzehnZeitWrapper)
+        {
+            _fuenfzehnZeitWrapper = fuenfzehnZeitWrapper;
+        }
         protected override async Task OnMessageActivityAsync(ITurnContext<IMessageActivity> turnContext, CancellationToken cancellationToken)
         {
             var replyText = $"Echo (Id Test): {turnContext.Activity.Text}";
             await turnContext.SendActivityAsync(MessageFactory.Text(replyText, replyText), cancellationToken);
-            await turnContext.SendActivityAsync(MessageFactory.Text(turnContext.Activity.From.Id));
-            await turnContext.SendActivityAsync(MessageFactory.Text(turnContext.Activity.Conversation.Id));
+            await turnContext.SendActivityAsync(MessageFactory.Text("UserId: ", turnContext.Activity.From.Id));
+            await turnContext.SendActivityAsync(MessageFactory.Text("ConversationId: ", turnContext.Activity.Conversation.Id));
+
+            await SendSuggestedActionsAsync(turnContext, cancellationToken);
+
+            if (turnContext.Activity.Text == UserCommandType.GetStatus.ToString())
+            {
+                var status = await _fuenfzehnZeitWrapper.GetStatusAsync();
+                await turnContext.SendActivityAsync($"{UserCommandType.GetStatus} initiated");
+
+                await turnContext.SendActivityAsync($"Status: {status}");
+            }
         }
 
         protected override async Task OnMembersAddedAsync(IList<ChannelAccount> membersAdded, ITurnContext<IConversationUpdateActivity> turnContext, CancellationToken cancellationToken)
@@ -29,6 +45,22 @@ namespace EchoBot.Bots
                     await turnContext.SendActivityAsync(MessageFactory.Text(welcomeText, welcomeText), cancellationToken);
                 }
             }
+        }
+
+        private static async Task SendSuggestedActionsAsync(ITurnContext turnContext, CancellationToken cancellationToken)
+        {
+            var reply = MessageFactory.Text("What is your favorite color?");
+
+            reply.SuggestedActions = new SuggestedActions()
+            {
+                Actions = new List<CardAction>()
+                    {
+                        new CardAction() { Title = "Status", Type = ActionTypes.ImBack, Value = UserCommandType.GetStatus.ToString(), Image = "../Media/info.png"},
+                        new CardAction() { Title = "Yellow", Type = ActionTypes.ImBack, Value = "Yellow", Image = "https://via.placeholder.com/20/FFFF00?text=Y", ImageAltText = "Y" },
+                        new CardAction() { Title = "Blue", Type = ActionTypes.ImBack, Value = "Blue", Image = "https://via.placeholder.com/20/0000FF?text=B", ImageAltText = "B" },
+                    },
+            };
+            await turnContext.SendActivityAsync(reply, cancellationToken);
         }
     }
 }
