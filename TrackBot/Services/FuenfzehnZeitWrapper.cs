@@ -16,11 +16,13 @@ internal class FuenfzehnZeitWrapper : IFuenfzehnZeitWrapper
 
   public async Task<string> GetStatusAsync()
   {
-    var response = await _httpClient.GetAsync("/Time/status");
-    response.EnsureSuccessStatusCode();
+    var response = await _httpClient.GetAsync("/time/status");
 
-    var responseString = await response.Content.ReadAsStringAsync();
-    
-    return responseString;
+    if (response.IsSuccessStatusCode)
+    {
+      return await response.Content.ReadAsStringAsync();
+    }
+
+    return "Can't get status";
   }
 }
