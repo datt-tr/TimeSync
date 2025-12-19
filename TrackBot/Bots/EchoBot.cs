@@ -21,8 +21,8 @@ namespace EchoBot.Bots
         {
             var replyText = $"Echo (Id Test): {turnContext.Activity.Text}";
             await turnContext.SendActivityAsync(MessageFactory.Text(replyText, replyText), cancellationToken);
-            await turnContext.SendActivityAsync(MessageFactory.Text("UserId: ", turnContext.Activity.From.Id));
-            await turnContext.SendActivityAsync(MessageFactory.Text("ConversationId: ", turnContext.Activity.Conversation.Id));
+            await turnContext.SendActivityAsync($"UserId: {turnContext.Activity.From.Id}");
+            await turnContext.SendActivityAsync($"ConversationId: {turnContext.Activity.Conversation.Id}");
 
             await SendSuggestedActionsAsync(turnContext, cancellationToken);
 
@@ -55,8 +55,8 @@ namespace EchoBot.Bots
             {
                 Actions = new List<CardAction>()
                     {
-                        new CardAction() { Title = "Status", Type = ActionTypes.ImBack, Value = UserCommandType.GetStatus.ToString(), Image = "../Media/info.png"},
-                        new CardAction() { Title = "Yellow", Type = ActionTypes.ImBack, Value = "Yellow", Image = "https://via.placeholder.com/20/FFFF00?text=Y", ImageAltText = "Y" },
+                        new CardAction() { Title = "Status", Type = ActionTypes.ImBack, Value = UserCommandType.GetStatus.ToString()},
+                        new CardAction() { Title = "Yellow", Type = ActionTypes.ImBack, Value = "Yellow"},
                         new CardAction() { Title = "Blue", Type = ActionTypes.ImBack, Value = "Blue", Image = "https://via.placeholder.com/20/0000FF?text=B", ImageAltText = "B" },
                     },
             };
