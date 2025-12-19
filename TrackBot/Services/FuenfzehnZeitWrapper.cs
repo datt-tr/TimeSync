@@ -1,15 +1,16 @@
 using System.Net.Http;
 using System.Threading.Tasks;
+using Microsoft.Extensions.Options;
 
 internal class FuenfzehnZeitWrapper : IFuenfzehnZeitWrapper
 {
   private readonly HttpClient _httpClient;
   private readonly GlobalVariables _globalVariables;
 
-  public FuenfzehnZeitWrapper(HttpClient httpClient, GlobalVariables globalVariables)
+  public FuenfzehnZeitWrapper(HttpClient httpClient, IOptions<GlobalVariables> globalVariables)
   {
     _httpClient = httpClient;
-    _globalVariables = globalVariables;
+    _globalVariables = globalVariables.Value;
 
     _httpClient.BaseAddress = new System.Uri(_globalVariables.BaseUrl + "/api/v1");
   }
