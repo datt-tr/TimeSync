@@ -1,3 +1,4 @@
+using System;
 using System.Net.Http;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Options;
@@ -12,7 +13,7 @@ internal class FuenfzehnZeitWrapper : IFuenfzehnZeitWrapper
     _httpClient = httpClient;
     _globalVariables = globalVariables.Value;
 
-    _httpClient.BaseAddress = new System.Uri(_globalVariables.BaseUrl + "/api/v1");
+    _httpClient.BaseAddress = new Uri(_globalVariables.BaseUrl);
   }
 
   public async Task<string> GetStatusAsync()
