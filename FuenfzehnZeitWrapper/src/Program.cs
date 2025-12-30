@@ -3,11 +3,26 @@ using FuenfzehnZeitWrapper.Models;
 using FuenfzehnZeitWrapper.Interfaces;
 using FuenfzehnZeitWrapper.Services;
 using FuenfzehnZeitWrapper.Helpers;
+using OpenTelemetry.Logs;
+using OpenTelemetry.Metrics;
+using OpenTelemetry.Resources;
+using OpenTelemetry.Trace;
 
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Logging.ClearProviders();
 builder.Logging.AddConsole();
+
+builder.Services.AddOpenTelemetry()
+      .ConfigureResource(resource => resource.AddService(builder.Environment.ApplicationName))
+      .WithTracing(tracing => tracing
+          .AddAspNetCoreInstrumentation()
+          .AddConsoleExporter())
+      .WithMetrics(metrics => metrics
+          .AddAspNetCoreInstrumentation()
+          .AddConsoleExporter())
+      .WithLogging(logging => logging
+        .AddConsoleExporter());
 
 builder.Services.AddControllers();
 builder.Services.AddOpenApi();
