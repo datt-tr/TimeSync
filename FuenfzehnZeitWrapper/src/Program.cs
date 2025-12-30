@@ -17,12 +17,12 @@ builder.Services.AddOpenTelemetry()
       .ConfigureResource(resource => resource.AddService(builder.Environment.ApplicationName))
       .WithTracing(tracing => tracing
           .AddAspNetCoreInstrumentation()
-          .AddConsoleExporter())
+          .AddOtlpExporter())
       .WithMetrics(metrics => metrics
           .AddAspNetCoreInstrumentation()
-          .AddConsoleExporter())
+          .AddOtlpExporter())
       .WithLogging(logging => logging
-        .AddConsoleExporter());
+        .AddOtlpExporter());
 
 builder.Services.AddControllers();
 builder.Services.AddOpenApi();
