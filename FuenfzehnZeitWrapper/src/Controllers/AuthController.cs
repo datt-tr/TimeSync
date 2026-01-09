@@ -13,12 +13,9 @@ namespace FuenfzehnZeitWrapper.Controllers;
 public class AuthController : ControllerBase
 {
   private readonly IFuenfzehnZeitService _fuenfzehnZeitService;
-  private readonly ILogger _logger;
-  private readonly string _fuenfzehnZeitError = "Failed FuenfzehnZeit Server Request";
 
-  public AuthController(IFuenfzehnZeitService fuenfzehnZeitService, ILogger<AuthController> logger)
+  public AuthController(IFuenfzehnZeitService fuenfzehnZeitService)
   {
-    _logger = logger;
     _fuenfzehnZeitService = fuenfzehnZeitService;
   }
 
@@ -32,14 +29,14 @@ public class AuthController : ControllerBase
     }
     catch (HttpRequestException)
     {
-      return new FuenfzehnZeitHttpRequestError().ToProblemDetails();
+      return new FuenfzehnZeitHttpRequestError().ToProblem();
     }
 
     return Results.Ok();
   }
 
   [HttpPost("log-out")]
-  public async Task<Results<Ok, BadRequest<string>>> LogOut()
+  public async Task<IResult> LogOut()
   {
     try
     {
@@ -47,8 +44,9 @@ public class AuthController : ControllerBase
     }
     catch (HttpRequestException)
     {
-      return TypedResults.BadRequest(_fuenfzehnZeitError);
+      return new FuenfzehnZeitHttpRequestError().ToProblem();
     }
-    return TypedResults.Ok();
+
+    return Results.Ok();
   }
 }

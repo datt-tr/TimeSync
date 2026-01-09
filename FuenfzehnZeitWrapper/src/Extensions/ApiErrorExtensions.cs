@@ -7,7 +7,7 @@ public static class ApiErrorExtensions
 {
   extension(ApiError error)
   {
-    public IResult ToProblemDetails()
+    public IResult ToProblem()
     {
       ArgumentNullException.ThrowIfNull(error, nameof(error));
 

@@ -1,4 +1,6 @@
 using System.Runtime.CompilerServices;
+using FuenfzehnZeitWrapper.Errors;
+using FuenfzehnZeitWrapper.Extensions;
 using FuenfzehnZeitWrapper.Interfaces;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
@@ -9,18 +11,15 @@ namespace FuenfzehnZeitWrapper.Controllers;
 [Route("api/v1/[controller]")]
 public class TimeController : ControllerBase
 {
-  private readonly ILogger _logger;
   private readonly IFuenfzehnZeitService _fuenfzehnZeitService;
-  private readonly string _fuenfzehnZeitError = "Failed FuenfzehnZeit Server Request";
 
-  public TimeController(IFuenfzehnZeitService fuenfzehnZeitService, ILogger<TimeController> logger)
+  public TimeController(IFuenfzehnZeitService fuenfzehnZeitService)
   {
-    _logger = logger;
     _fuenfzehnZeitService = fuenfzehnZeitService;
   }
 
   [HttpPost("office/start")]
-  public async Task<Results<Ok, BadRequest<string>>> StartOffice()
+  public async Task<IResult> StartOffice()
   {
     try
     {
@@ -28,14 +27,14 @@ public class TimeController : ControllerBase
     }
     catch (HttpRequestException)
     {
-      return TypedResults.BadRequest(_fuenfzehnZeitError);
+      return new FuenfzehnZeitHttpRequestError().ToProblem();
     }
 
-    return TypedResults.Ok();
+    return Results.Ok();
   }
 
   [HttpPost("office/end")]
-  public async Task<Results<Ok, BadRequest<string>>> EndOffice()
+  public async Task<IResult> EndOffice()
   {
     try
     {
@@ -43,14 +42,14 @@ public class TimeController : ControllerBase
     }
     catch (HttpRequestException)
     {
-      return TypedResults.BadRequest(_fuenfzehnZeitError);
+      return new FuenfzehnZeitHttpRequestError().ToProblem();
     }
 
-    return TypedResults.Ok();
+    return Results.Ok();
   }
 
   [HttpPost("break/start")]
-  public async Task<Results<Ok, BadRequest<string>>> StartBreak()
+  public async Task<IResult> StartBreak()
   {
     try
     {
@@ -58,14 +57,14 @@ public class TimeController : ControllerBase
     }
     catch (HttpRequestException)
     {
-      return TypedResults.BadRequest(_fuenfzehnZeitError);
+      return new FuenfzehnZeitHttpRequestError().ToProblem();
     }
 
-    return TypedResults.Ok();
+    return Results.Ok();
   }
 
   [HttpPost("break/end")]
-  public async Task<Results<Ok, BadRequest<string>>> EndBreak()
+  public async Task<IResult> EndBreak()
   {
     try
     {
@@ -73,14 +72,14 @@ public class TimeController : ControllerBase
     }
     catch (HttpRequestException)
     {
-      return TypedResults.BadRequest(_fuenfzehnZeitError);
+      return new FuenfzehnZeitHttpRequestError().ToProblem();
     }
 
-    return TypedResults.Ok();
+    return Results.Ok();
   }
 
   [HttpPost("home-office/start")]
-  public async Task<Results<Ok, BadRequest<string>>> StartHomeOffice()
+  public async Task<IResult> StartHomeOffice()
   {
     try
     {
@@ -88,14 +87,14 @@ public class TimeController : ControllerBase
     }
     catch (HttpRequestException)
     {
-      return TypedResults.BadRequest(_fuenfzehnZeitError);
+      return new FuenfzehnZeitHttpRequestError().ToProblem();
     }
 
-    return TypedResults.Ok();
+    return Results.Ok();
   }
 
   [HttpPost("home-office/end")]
-  public async Task<Results<Ok, BadRequest<string>>> EndHomeOffice()
+  public async Task<IResult> EndHomeOffice()
   {
     try
     {
@@ -103,45 +102,52 @@ public class TimeController : ControllerBase
     }
     catch (HttpRequestException)
     {
-      return TypedResults.BadRequest(_fuenfzehnZeitError);
+      return new FuenfzehnZeitHttpRequestError().ToProblem();
     }
 
-    return TypedResults.Ok();
+    return Results.Ok();
   }
 
   [HttpGet("status")]
-  public async Task<Results<Ok<string>, BadRequest<string>>> GetStatus()
+  public async Task<IResult> GetStatus()
   {
+    string status;
+
     try
     {
-      var status = await _fuenfzehnZeitService.GetStatusAsync();
-      return TypedResults.Ok(status);
+      status = await _fuenfzehnZeitService.GetStatusAsync();
     }
     catch (HttpRequestException)
     {
-      return TypedResults.BadRequest(_fuenfzehnZeitError);
+      return new FuenfzehnZeitHttpRequestError().ToProblem();
     }
     catch (InvalidOperationException)
     {
-      return TypedResults.BadRequest($"{nameof(GetStatus)} is not possible");
+      return Results.BadRequest($"{nameof(GetStatus)} is not possible");
+      //TODO: remove invalidoption exceptions
     }
+
+    return Results.Ok(status);
   }
 
   [HttpGet("working-hours")]
-  public async Task<Results<Ok<string>, BadRequest<string>>> GetWorkingHours()
+  public async Task<IResult> GetWorkingHours()
   {
+    string workingHours;
+
     try
     {
-      var workingHours = await _fuenfzehnZeitService.GetWorkingHoursAsync();
-      return TypedResults.Ok(workingHours);
+      workingHours = await _fuenfzehnZeitService.GetWorkingHoursAsync();
     }
     catch (HttpRequestException)
     {
-      return TypedResults.BadRequest(_fuenfzehnZeitError);
+      return new FuenfzehnZeitHttpRequestError().ToProblem();
     }
     catch (InvalidOperationException)
     {
-      return TypedResults.BadRequest($"{nameof(GetWorkingHours)} is not possible");
+      return Results.BadRequest($"{nameof(GetWorkingHours)} is not possible");
     }
+
+    return Results.Ok(workingHours);
   }
 }
