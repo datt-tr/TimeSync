@@ -2,7 +2,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.5.2.0
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FuenfzehnZeitWrapper", "FuenfzehnZeitWrapper.csproj", "{7130DCE8-18AA-3CB1-16F3-B1CAFD0DBE26}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FuenfzehnZeitWrapper", "./src/FuenfzehnZeitWrapper.csproj", "{7130DCE8-18AA-3CB1-16F3-B1CAFD0DBE26}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

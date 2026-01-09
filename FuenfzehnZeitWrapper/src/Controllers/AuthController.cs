@@ -1,6 +1,10 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Http.HttpResults;
 using FuenfzehnZeitWrapper.Interfaces;
+using FluentResults;
+using FuenfzehnZeitWrapper.Errors;
+using FuenfzehnZeitWrapper.Extensions;
+using NLog.LayoutRenderers;
 
 namespace FuenfzehnZeitWrapper.Controllers;
 
@@ -19,7 +23,7 @@ public class AuthController : ControllerBase
   }
 
   [HttpPost("log-in")]
-  public async Task<Results<Ok, BadRequest<string>>> LogIn()
+  public async Task<IResult> LogIn()
   {
     try
     {
@@ -28,10 +32,10 @@ public class AuthController : ControllerBase
     }
     catch (HttpRequestException)
     {
-      return TypedResults.BadRequest(_fuenfzehnZeitError);
+      return new FuenfzehnZeitHttpRequestError().ToProblemDetails();
     }
 
-    return TypedResults.Ok();
+    return Results.Ok();
   }
 
   [HttpPost("log-out")]
