@@ -25,7 +25,12 @@ public class AuthController : ControllerBase
     try
     {
       await _fuenfzehnZeitService.GetLogInPageAsync();
-      await _fuenfzehnZeitService.LogInAsync();
+      var result = await _fuenfzehnZeitService.LogInAsync();
+      
+      if (result.IsFailed)
+      {
+        return result.ToProblem();
+      }
     }
     catch (HttpRequestException)
     {

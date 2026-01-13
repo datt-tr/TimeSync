@@ -1,9 +1,11 @@
+using FluentResults;
+
 namespace FuenfzehnZeitWrapper.Interfaces;
 
 public interface IFuenfzehnZeitService
 {
   Task GetLogInPageAsync();
-  Task LogInAsync();
+  Task<Result> LogInAsync();
   Task LogOutAsync();
   Task StartOfficeAsync();
   Task EndOfficeAsync();

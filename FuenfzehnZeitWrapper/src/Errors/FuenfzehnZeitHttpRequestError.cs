@@ -1,6 +1,6 @@
 namespace FuenfzehnZeitWrapper.Errors;
 
-public class FuenfzehnZeitHttpRequestError : ApiError
+public class FuenfzehnZeitHttpRequestError : ResultError
 {
   public FuenfzehnZeitHttpRequestError() : base(
     title: "15zeit Server Error",

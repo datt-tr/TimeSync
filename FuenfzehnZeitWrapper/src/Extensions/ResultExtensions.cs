@@ -14,8 +14,8 @@ public static class ResultExtensions
       if (result.IsSuccess)
         throw new InvalidOperationException($"{nameof(ToProblem)} must not be called for Success Results");
 
-      var error = result.Errors.OfType<ApiError>().FirstOrDefault()
-        ?? throw new NullReferenceException($"{nameof(result)} does not contain the needed error of {nameof(ApiError)}");
+      var error = result.Errors.OfType<ResultError>().FirstOrDefault()
+        ?? throw new NullReferenceException($"{nameof(result)} does not contain the needed error of {nameof(ResultError)}");
 
       return error.ToProblem();
     }

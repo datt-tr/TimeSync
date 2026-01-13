@@ -2,6 +2,8 @@ using Microsoft.Extensions.Options;
 using FuenfzehnZeitWrapper.Interfaces;
 using FuenfzehnZeitWrapper.Models;
 using FuenfzehnZeitWrapper.Enums;
+using FluentResults;
+using FuenfzehnZeitWrapper.Errors;
 
 namespace FuenfzehnZeitWrapper.Services;
 
@@ -38,7 +40,7 @@ internal class FuenfzehnZeitService : IFuenfzehnZeitService
     _logger.LogDebug("ConfirmUid: {confirmUid}", confirmUid);
   }
 
-  public async Task LogInAsync()
+  public async Task<Result> LogInAsync()
   {
     using var formData = _formDataBuilder.Build(RequestType.LogIn);
 
@@ -50,13 +52,13 @@ internal class FuenfzehnZeitService : IFuenfzehnZeitService
     if (_htmlParser.ContainsError(responseString, ErrorType.InvalidConfirmUid))
     {
       _logger.LogError("Invalid ConfirmUid");
-      return;
+      return Result.Fail(new InvalidConfirmUidError());
     }
 
     if (_htmlParser.ContainsError(responseString, ErrorType.InvalidCredentials))
     {
       _logger.LogError("Invalid Credentials");
-      return;
+      return Result.Fail(new InvalidCredentialsError());
     }
 
     var uid = _htmlParser.GetUid(responseString);
@@ -68,6 +70,8 @@ internal class FuenfzehnZeitService : IFuenfzehnZeitService
     // FuenfzehnZeit requires to be redirected to this page to continue
     using var followUp = await _httpClient.GetAsync($"?UID={uid}");
     followUp.EnsureSuccessStatusCode();
+
+    return Result.Ok();
   }
 
   public async Task LogOutAsync()
@@ -185,20 +189,6 @@ internal class FuenfzehnZeitService : IFuenfzehnZeitService
 
     return status;
   }
-
-  // private async Task<string> SendWebTerminalRequestAsync(RequestType type)
-  // {
-  //   using var formData = _formDataBuilder.Build(type);
-  //   using var response = await _httpClient.PostAsync($"?UID={_userSessionService.GetUid()}", formData);
-  //   response.EnsureSuccessStatusCode();
-
-  //   var responseString = await response.Content.ReadAsStringAsync();
-  //   if (!IsLoggedIn(responseString) || !IsValidOrder(responseString)) return string.Empty;
-
-  //   _userSessionService.UpdateCallNumber();
-
-  //   return responseString;
-  // }
 
   private bool IsLoggedIn(string html)
   {

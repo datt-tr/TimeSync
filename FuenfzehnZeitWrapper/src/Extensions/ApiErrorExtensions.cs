@@ -5,7 +5,7 @@ namespace FuenfzehnZeitWrapper.Extensions;
 
 public static class ApiErrorExtensions
 {
-  extension(ApiError error)
+  extension(ResultError error)
   {
     public IResult ToProblem()
     {
