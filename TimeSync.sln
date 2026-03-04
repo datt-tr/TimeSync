@@ -9,7 +9,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TrackBot", "TrackBot\TrackB
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WeatherMCPServer", "WeatherMCPServer\WeatherMCPServer.csproj", "{E8FAAF1C-9747-BB00-9460-464FD603D3AC}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FuenfzehnZeitWrapper", "FuenfzehnZeitWrapper\src\FuenfzehnZeitWrapper.csproj", "{4EECC98C-FDE2-D630-54EB-113AD3903D53}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FuenfzehnZeitWrapper", "FuenfzehnZeitWrapper\src\FuenfzehnZeitWrapper.Api\FuenfzehnZeitWrapper.Api.csproj", "{4EECC98C-FDE2-D630-54EB-113AD3903D53}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
