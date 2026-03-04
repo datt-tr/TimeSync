@@ -1,0 +1,8 @@
+services:
+  app: 
+    build: .
+    ports:
+      - 7278:7278
+    environment:
+      ASPNETCORE_URLS: http://+:7278
+      ASPNETCORE_ENVIRONMENT: Development
