@@ -5,7 +5,7 @@ VisualStudioVersion = 17.0.31903.59
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{827E0CD3-B72D-47B6-A68D-7590B98EB39B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FuenfzehnZeitWrapper.Api", "src\FuenfzehnZeitWrapper.Api\FuenfzehnZeitWrapper.Api.csproj", "{6540B29B-9619-499F-9CA0-388D94C892A6}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FuenfzehnZeitWrapper.Presentation", "src\FuenfzehnZeitWrapper.Presentation\FuenfzehnZeitWrapper.Presentation.csproj", "{6540B29B-9619-499F-9CA0-388D94C892A6}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FuenfzehnZeitWrapper.Application", "src\FuenfzehnZeitWrapper.Application\FuenfzehnZeitWrapper.Application.csproj", "{756F7084-43BF-455F-9D75-4D3DCEA068A5}"
 EndProject

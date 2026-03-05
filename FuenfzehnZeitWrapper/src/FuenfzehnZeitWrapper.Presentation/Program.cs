@@ -16,7 +16,6 @@ builder.Services.AddOpenTelemetry()
       .WithLogging(logging => logging
         .AddOtlpExporter());
 
-
 builder.Services.AddControllers();
 
 builder.Services.AddOpenApi();
