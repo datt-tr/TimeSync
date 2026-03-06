@@ -1,3 +1,4 @@
+using FuenfzehnZeitWrapper.Presentation.Models;
 using OpenTelemetry.Logs;
 using OpenTelemetry.Metrics;
 using OpenTelemetry.Resources;
@@ -19,6 +20,8 @@ builder.Services.AddOpenTelemetry()
 builder.Services.AddControllers();
 
 builder.Services.AddOpenApi();
+
+builder.Services.Configure<Configurations>(builder.Configuration.GetSection(Configurations.SectionName));
 
 var app = builder.Build();
 
