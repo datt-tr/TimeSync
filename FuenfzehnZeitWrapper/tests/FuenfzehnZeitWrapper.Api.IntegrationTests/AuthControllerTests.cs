@@ -1,10 +1,10 @@
-﻿using FuenfzehnZeitWrapper.Presentation.IntegrationTests.Fixtures;
-using FuenfzehnZeitWrapper.Presentation.Models;
+﻿using FuenfzehnZeitWrapper.Api.IntegrationTests.Fixtures;
+using FuenfzehnZeitWrapper.Api.Models;
 using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.Extensions.Options;
 using System.Net;
 
-namespace FuenfzehnZeitWrapper.Presentation.IntegrationTests;
+namespace FuenfzehnZeitWrapper.Api.IntegrationTests;
 
 public sealed class AuthControllerTests : IClassFixture<CustomWebApplicationFactory<Program>>
 {

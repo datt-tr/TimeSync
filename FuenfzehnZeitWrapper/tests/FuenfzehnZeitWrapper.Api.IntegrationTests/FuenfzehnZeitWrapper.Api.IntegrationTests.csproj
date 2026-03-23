@@ -26,7 +26,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\src\FuenfzehnZeitWrapper.Presentation\FuenfzehnZeitWrapper.Presentation.csproj" />
+    <ProjectReference Include="..\..\src\FuenfzehnZeitWrapper.Api\FuenfzehnZeitWrapper.Api.csproj" />
   </ItemGroup>
 
 </Project>

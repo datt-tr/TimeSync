@@ -1,4 +1,4 @@
-using FuenfzehnZeitWrapper.Presentation.Models;
+using FuenfzehnZeitWrapper.Api.Models;
 using OpenTelemetry.Logs;
 using OpenTelemetry.Metrics;
 using OpenTelemetry.Resources;

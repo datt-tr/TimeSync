@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 
-namespace FuenfzehnZeitWrapper.Presentation.Controllers;
+namespace FuenfzehnZeitWrapper.Api.Controllers;
 
 [ApiController]
 [Route("/api/v1/[controller]")]

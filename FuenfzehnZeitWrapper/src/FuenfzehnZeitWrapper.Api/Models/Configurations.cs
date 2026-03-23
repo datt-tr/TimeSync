@@ -1,4 +1,4 @@
-﻿namespace FuenfzehnZeitWrapper.Presentation.Models
+﻿namespace FuenfzehnZeitWrapper.Api.Models
 {
     public class Configurations
     {

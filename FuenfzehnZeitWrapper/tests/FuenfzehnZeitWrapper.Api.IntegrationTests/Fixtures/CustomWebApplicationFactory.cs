@@ -1,4 +1,4 @@
-﻿using FuenfzehnZeitWrapper.Presentation.Models;
+﻿using FuenfzehnZeitWrapper.Api.Models;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.Extensions.DependencyInjection;
@@ -7,7 +7,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace FuenfzehnZeitWrapper.Presentation.IntegrationTests.Fixtures;
+namespace FuenfzehnZeitWrapper.Api.IntegrationTests.Fixtures;
     public sealed class CustomWebApplicationFactory<TProgram> : WebApplicationFactory<TProgram> where TProgram : class
     {
 
