@@ -1,4 +1,7 @@
 using FuenfzehnZeitWrapper.Api.Models;
+using FuenfzehnZeitWrapper.Application;
+using FuenfzehnZeitWrapper.Application.Interfaces;
+using FuenfzehnZeitWrapper.Application.Services;
 using Microsoft.AspNetCore.Http.Features;
 using OpenTelemetry.Logs;
 using OpenTelemetry.Metrics;
@@ -6,7 +9,11 @@ using OpenTelemetry.Resources;
 using OpenTelemetry.Trace;
 using System.Diagnostics;
 
+
 var builder = WebApplication.CreateBuilder(args);
+
+builder.Logging.ClearProviders();
+builder.Logging.AddConsole();
 
 builder.Services.AddProblemDetails(options =>
 {
@@ -18,8 +25,7 @@ builder.Services.AddProblemDetails(options =>
         Activity? activity = context.HttpContext.Features.Get<IHttpActivityFeature>()?.Activity;
         context.ProblemDetails.Extensions.TryAdd("traceId", activity?.Id);
     };
-}
-);
+});
 
 builder.Services.AddOpenTelemetry()
       .ConfigureResource(resource => resource.AddService(builder.Environment.ApplicationName))
@@ -38,7 +44,11 @@ builder.Services.AddOpenApi();
 
 builder.Services.Configure<Configurations>(builder.Configuration.GetSection(Configurations.SectionName));
 
+builder.Services.AddScoped<IFuenfzehnZeitService, FuenfzehnZeitService>();
+
 var app = builder.Build();
+
+app.UseExceptionHandler();
 
 app.UseStatusCodePages();
 

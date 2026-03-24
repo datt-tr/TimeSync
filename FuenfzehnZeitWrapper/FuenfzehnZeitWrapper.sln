@@ -17,6 +17,19 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FuenfzehnZeitWrapper.Api", 
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FuenfzehnZeitWrapper.Api.IntegrationTests", "tests\FuenfzehnZeitWrapper.Api.IntegrationTests\FuenfzehnZeitWrapper.Api.IntegrationTests.csproj", "{894C0AFB-156F-0C43-43FB-71224CEB005B}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{DA5B7D3D-9FA8-4900-BE31-8F49862B1660}"
+	ProjectSection(SolutionItems) = preProject
+		.editorconfig = .editorconfig
+		compose.yaml = compose.yaml
+		Dockerfile = Dockerfile
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "requests", "requests", "{52D4B934-7769-4850-A986-7A40F788F9B0}"
+	ProjectSection(SolutionItems) = preProject
+		AuthController.http = AuthController.http
+		http-client.env.json = http-client.env.json
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
